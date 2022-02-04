@@ -92,4 +92,4 @@ jobs:
         poetry config virtualenvs.in-project true
         poetry install
     - name: Test with pytest
-      run:  pytest
+      run:  poetry run pytest
