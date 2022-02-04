@@ -332,3 +332,4 @@ vendors.js
 *.min.js
 .env
 .envs/*
+.envrc
