@@ -1,14 +1,12 @@
 import rules
 from django.conf import settings
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
 from rules.contrib.models import RulesModelBase, RulesModelMixin
 from slugify import slugify
 
-from .rules import (
-    is_character_owner,
-    is_group_owner_and_authenticated,
+from .rules import (  # is_character_owner,; is_group_owner_and_authenticated,
     is_owner,
     is_owner_or_public,
 )
@@ -59,6 +57,9 @@ class CharacterGroup(
         help_text=_("Automatically generated from description"), null=True, blank=True
     )
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         rules_permissions = {
             "add": rules.is_authenticated,
@@ -102,14 +103,17 @@ class Character(
         help_text=_("The group this character belongs to."),
     )
 
+    def __str__(self):
+        return self.name
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(f"{self.group.name} {self.name}")
-        super(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
         rules_permissions = {
-            "add": is_group_owner_and_authenticated,
+            "add": rules.is_authenticated,
             "read": is_owner_or_public,
             "edit": is_owner,
             "delete": is_owner,
@@ -135,9 +139,12 @@ class Quote(
         Character, on_delete=models.CASCADE, help_text=_("The character who said this.")
     )
 
+    def __str__(self):
+        return f"{self.character.name}: {self.quote}"
+
     class Meta:
         rules_permissions = {
-            "add": is_character_owner,
+            # "add": is_character_owner,
             "read": is_owner_or_public,
             "edit": is_owner,
             "delete": is_owner,
@@ -147,3 +154,6 @@ class Quote(
 class CharacterMarkovModel(TimeStampedModel):
     character = models.OneToOneField(Character, on_delete=models.CASCADE)
     data = models.JSONField(null=True, blank=True)
+
+    def __str__(self):
+        return self.character.name
