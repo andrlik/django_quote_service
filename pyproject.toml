@@ -34,6 +34,7 @@ django-anymail = {extras = ["sendgrid"], version = "^8.5"}
 markovify = "^0.9.3"
 rules = "^3.1"
 django-compressor = "^3.1"
+Brotli = "^1.0.9"
 
 [tool.poetry.dev-dependencies]
 Werkzeug = {extras = ["watchdog"], version = "^2.0.2"}
