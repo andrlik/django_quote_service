@@ -6,7 +6,7 @@ name: CI
 #  COMPOSE_DOCKER_CLI_BUILD: 1
 
 env:
-  DJANGO_DEBUG=True
+  DJANGO_DEBUG: True
 
 on:
   pull_request:
