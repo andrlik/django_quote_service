@@ -10,5 +10,5 @@ class QuotesConfig(AppConfig):
     def ready(self):
         try:
             import django_quote_service.quotes.receivers  # noqa F401
-        except ImportError:
+        except ImportError:  # pragma: nocover
             pass

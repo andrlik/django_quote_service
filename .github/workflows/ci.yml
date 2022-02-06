@@ -98,3 +98,7 @@ jobs:
       run: |
         poetry run python manage.py collectstatic --noinput
         poetry run pytest
+    - name: Submit coverage data to coveralls.io
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
