@@ -98,7 +98,9 @@ jobs:
       run: |
         poetry run python manage.py collectstatic --noinput
         poetry run pytest --cov-report=
+        poetry run coverage lcov
     - name: Submit coverage data to coveralls.io
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: "coverage.lcov"
