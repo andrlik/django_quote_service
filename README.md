@@ -4,6 +4,9 @@ A simple project that takes collections of quotes and then exposes an API for bo
 
 [![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
 [![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+![Test results](https://github.com/andrlik/django_quote_service/actions/workflows/ci.yml/badge.svg)
+![Codestyle check results](https://github.com/andrlik/django_quote_service/actions/workflows/codestyle.yml/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/andrlik/django_quote_service/badge.svg?branch=main)](https://coveralls.io/github/andrlik/django_quote_service?branch=main)
 
 License: BSD
 
