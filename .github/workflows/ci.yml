@@ -5,6 +5,9 @@ name: CI
 #  DOCKER_BUILDKIT: 1
 #  COMPOSE_DOCKER_CLI_BUILD: 1
 
+env:
+  DJANGO_DEBUG=True
+
 on:
   pull_request:
     branches: [ "master", "main" ]
