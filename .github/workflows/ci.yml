@@ -97,7 +97,7 @@ jobs:
     - name: Test with pytest
       run: |
         poetry run python manage.py collectstatic --noinput
-        poetry run pytest
+        poetry run pytest --cov-report=
     - name: Submit coverage data to coveralls.io
       uses: coverallsapp/github-action@master
       with:
