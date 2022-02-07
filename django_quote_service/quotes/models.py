@@ -57,7 +57,7 @@ class CharacterGroup(
         help_text=_("Automatically generated from description"), null=True, blank=True
     )
 
-    def __str__(self):
+    def __str__(self):  # pragma: nocover
         return self.name
 
     class Meta:
@@ -103,7 +103,7 @@ class Character(
         help_text=_("The group this character belongs to."),
     )
 
-    def __str__(self):
+    def __str__(self):  # pragma: nocover
         return self.name
 
     def save(self, *args, **kwargs):
@@ -139,7 +139,7 @@ class Quote(
         Character, on_delete=models.CASCADE, help_text=_("The character who said this.")
     )
 
-    def __str__(self):
+    def __str__(self):  # pragma: nocover
         return f"{self.character.name}: {self.quote}"
 
     class Meta:
@@ -155,5 +155,5 @@ class CharacterMarkovModel(TimeStampedModel):
     character = models.OneToOneField(Character, on_delete=models.CASCADE)
     data = models.JSONField(null=True, blank=True)
 
-    def __str__(self):
+    def __str__(self):  # pragma: nocover
         return self.character.name
