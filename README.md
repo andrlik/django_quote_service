@@ -6,6 +6,7 @@ A simple project that takes collections of quotes and then exposes an API for bo
 [![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 ![Test results](https://github.com/andrlik/django_quote_service/actions/workflows/ci.yml/badge.svg)
 ![Codestyle check results](https://github.com/andrlik/django_quote_service/actions/workflows/codestyle.yml/badge.svg)
+[![Documentation Status](https://readthedocs.org/projects/django-quote-service/badge/?version=latest)](https://django-quote-service.readthedocs.io/en/latest/?badge=latest)
 [![Coverage Status](https://coveralls.io/repos/github/andrlik/django_quote_service/badge.svg?branch=main)](https://coveralls.io/github/andrlik/django_quote_service?branch=main)
 
 License: BSD
