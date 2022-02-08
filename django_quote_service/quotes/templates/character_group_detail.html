@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block extratitle %}{{ group.name }} - {% endblock %}
+{% block content %}
+<h1>{{ group.name }}</h1>
+{{ group.description_rendered }}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load i18n crispy_forms_tags %}
+{% block extratitle %}{% trans "Deleting" %} {{ group.name }} - {% endblock %}
+{% block content %}
+<h1>{% trans "Deleting" %} {{ group.name }}</h1>
+<p><strong>{% trans "Are you sure you want to delete:" %}</strong> {{ group.name }}?</p>
+<form method="post">{% csrf_token %}
+<button type="submit" class="btn btn-danger">{% trans "Delete" %}</button> <a href="" class="btn btn-secondary">{% trans "Go back" %}</a>
+</form>
+{% endblock %}
