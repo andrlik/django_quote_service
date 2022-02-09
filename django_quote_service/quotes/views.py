@@ -4,16 +4,14 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import DetailView as GenericDetail, ListView as GenericList
-from django.views.generic.edit import (
-    CreateView as GenericCreate,
-    DeleteView as GenericDelete,
-    UpdateView as GenericUpdate,
-)
+from django.views.generic import DetailView as GenericDetail
+from django.views.generic import ListView as GenericList
+from django.views.generic.edit import CreateView as GenericCreate
+from django.views.generic.edit import DeleteView as GenericDelete
+from django.views.generic.edit import UpdateView as GenericUpdate
 from rules.contrib.views import PermissionRequiredMixin
 
-from .models import CharacterGroup, Character, Quote
-
+from .models import Character, CharacterGroup, Quote
 
 # Create your views here.
 
@@ -170,7 +168,7 @@ class CharacterUpdateView(LoginRequiredMixin, PermissionRequiredMixin, GenericUp
     fields = ["name", "description", "public", "allow_markov"]
 
     def get_success_url(self):
-        messages.success(self.request, f"Successfully updated character!")
+        messages.success(self.request, "Successfully updated character!")
         return reverse_lazy(
             "quotes:character_detail", kwargs={"slug": self.kwargs["slug"]}
         )
@@ -201,7 +199,7 @@ class CharacterListView(LoginRequiredMixin, PermissionRequiredMixin, GenericList
 
     model = Character
     template_name = "quotes/character_list.html"
-    permission_required = "quotes.view_charactergroup"
+    permission_required = "quotes.read_charactergroup"
     context_object_name = "characters"
     paginate_by = 15
     allow_empty = True
@@ -299,7 +297,7 @@ class QuoteCreateView(LoginRequiredMixin, PermissionRequiredMixin, GenericCreate
             return self.form_invalid(self, form)
         form.instance.character = self.character
         form.instance.owner = self.request.user
-        obj = form.save()
+        form.save()
         messages.success(self.request, _("Successfully added quote!"))
         return HttpResponseRedirect(
             redirect_to=reverse_lazy(
@@ -353,10 +351,10 @@ class QuoteDeleteView(LoginRequiredMixin, PermissionRequiredMixin, GenericDelete
     permission_required = "quotes.delete_quote"
     template_name = "quotes/quote_delete.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        self.character = context["quote"].character
-        return context
+    def get_object(self, *args, **kwargs):
+        object = super().get_object(*args, **kwargs)
+        self.character = object.character
+        return object
 
     def get_success_url(self):
         return reverse_lazy(
