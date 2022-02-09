@@ -18,7 +18,9 @@ urlpatterns = [
         "groups/<int:id>/", view=CharacterGroupDetailView.as_view(), name="group_detail"
     ),
     path(
-        "groups/<int:id>/", view=CharacterGroupUpdateView.as_view(), name="group_update"
+        "groups/<int:id>/edit/",
+        view=CharacterGroupUpdateView.as_view(),
+        name="group_update",
     ),
     path(
         "groups/<int:id>/delete/",

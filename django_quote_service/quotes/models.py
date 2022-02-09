@@ -67,6 +67,7 @@ class CharacterGroup(
             "edit": is_owner,
             "delete": is_owner,
         }
+        ordering = ["name"]
 
 
 class Character(
