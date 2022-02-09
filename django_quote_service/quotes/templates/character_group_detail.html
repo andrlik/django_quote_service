@@ -4,4 +4,6 @@
 {% block content %}
 <h1>{{ group.name }}</h1>
 {{ group.description_rendered }}
+  <a href="{% url 'quotes:group_update' group.id %}" class="btn btn-primary">{% trans "Edit group" %}</a> <a href="{% url 'quotes:group_list' %}" class="btn btn-secondary">{% trans "Back to list" %}</a>
+  <p><a href="{% url 'quotes:group_delete' group.id %}" class="btn btn-danger">{% trans "Delete group" %}</a></p>
 {% endblock %}

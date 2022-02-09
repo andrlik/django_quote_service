@@ -3,9 +3,10 @@
 {% block extratitle %}{% trans "Character Groups" %} - {% endblock %}
 {% block content %}
 <h1>{% trans "Your Character Groups" %}</h1>
+  <p><a class="btn btn-primary" href="{% url 'quotes:group_create' %}">{% trans "Create new group" %}</a></p>
 <ul>
   {% for group in page_obj %}
-  <li><a href="">{{ group.name }}</a></li>
+  <li><a href="{% url 'quotes:group_detail' group.id %}">{{ group.name }}</a></li>
   {% empty %}
   <li>{%  trans "No groups found!" %}</li>
   {% endfor%}

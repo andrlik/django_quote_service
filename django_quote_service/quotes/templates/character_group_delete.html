@@ -5,6 +5,6 @@
 <h1>{% trans "Deleting" %} {{ group.name }}</h1>
 <p><strong>{% trans "Are you sure you want to delete:" %}</strong> {{ group.name }}?</p>
 <form method="post">{% csrf_token %}
-<button type="submit" class="btn btn-danger">{% trans "Delete" %}</button> <a href="" class="btn btn-secondary">{% trans "Go back" %}</a>
+<button type="submit" class="btn btn-danger">{% trans "Delete" %}</button> <a href="{% url 'quotes:group_detail' group.id %}" class="btn btn-secondary">{% trans "Go back" %}</a>
 </form>
 {% endblock %}
