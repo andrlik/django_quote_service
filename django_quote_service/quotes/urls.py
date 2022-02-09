@@ -1,21 +1,21 @@
 from django.urls import path
 
 from .views import (
+    CharacterCreateView,
+    CharacterDeleteView,
+    CharacterDetailView,
     CharacterGroupCreateView,
     CharacterGroupDeleteView,
     CharacterGroupDetailView,
     CharacterGroupListView,
     CharacterGroupUpdateView,
     CharacterListView,
-    CharacterCreateView,
     CharacterUpdateView,
-    CharacterDetailView,
-    CharacterDeleteView,
-    QuoteListView,
     QuoteCreateView,
-    QuoteDetailView,
-    QuoteUpdateView,
     QuoteDeleteView,
+    QuoteDetailView,
+    QuoteListView,
+    QuoteUpdateView,
 )
 
 app_name = "quotes"
