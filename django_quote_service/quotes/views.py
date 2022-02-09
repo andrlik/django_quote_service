@@ -1,14 +1,19 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import DetailView, ListView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic import DetailView as GenericDetail, ListView as GenericList
+from django.views.generic.edit import (
+    CreateView as GenericCreate,
+    DeleteView as GenericDelete,
+    UpdateView as GenericUpdate,
+)
 from rules.contrib.views import PermissionRequiredMixin
 
 from .models import CharacterGroup
 
+
 # Create your views here.
 
 
-class CharacterGroupListView(LoginRequiredMixin, ListView):
+class CharacterGroupListView(LoginRequiredMixin, GenericList):
     """
     Displays Character Groups owned by the user.
     TODO: For now, only user owned groups, we won't bother with public options.
@@ -23,7 +28,9 @@ class CharacterGroupListView(LoginRequiredMixin, ListView):
         return CharacterGroup.objects.filter(owner=self.request.user)
 
 
-class CharacterGroupDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+class CharacterGroupDetailView(
+    LoginRequiredMixin, PermissionRequiredMixin, GenericDetail
+):
     """
     Displays details for a character group.
     """
@@ -34,7 +41,9 @@ class CharacterGroupDetailView(LoginRequiredMixin, PermissionRequiredMixin, Deta
     permission_required = "quotes.read_charactergroup"
 
 
-class CharacterGroupUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class CharacterGroupUpdateView(
+    LoginRequiredMixin, PermissionRequiredMixin, GenericUpdate
+):
     """
     Update an existing character group
     """
@@ -46,7 +55,9 @@ class CharacterGroupUpdateView(LoginRequiredMixin, PermissionRequiredMixin, Upda
     fields = ["name", "description", "public"]
 
 
-class CharacterGroupDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class CharacterGroupDeleteView(
+    LoginRequiredMixin, PermissionRequiredMixin, GenericDelete
+):
     """
     Delete and existing character group.
     """
@@ -57,7 +68,7 @@ class CharacterGroupDeleteView(LoginRequiredMixin, PermissionRequiredMixin, Dele
     permission_required = "quotes.delete_charactergroup"
 
 
-class CharacterGroupCreateView(LoginRequiredMixin, CreateView):
+class CharacterGroupCreateView(LoginRequiredMixin, GenericCreate):
     """
     Create a new character group.
     """

@@ -8,6 +8,7 @@ from .views import (
     CharacterGroupUpdateView,
 )
 
+app_name = "quotes"
 urlpatterns = [
     path("groups/", view=CharacterGroupListView.as_view(), name="group_list"),
     path(
