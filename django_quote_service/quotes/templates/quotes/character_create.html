@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n crispy_forms_filters %}
+{% block extratitle %}{% trans "Add new character to" %} {{ group.name }} - {% endblock %}
+{% block content %}
+<h1>{% translate "Add Character" %}</h1>
+  <p>{% blocktranslate %}Add a character to {{ group.name }} using the form below.{% endblocktranslate %}</p>
+  <form method="post">{% csrf_token %}
+  {{ form|crispy }}
+  <button type="submit" class="btn btn-success">{% translate "Add character" %}</button> <a href="{% url 'quotes:character_list' group=group.id %}" class="btn btn-secondary">{% translate "Back to character list" %}</a>
+  </form>
+{% endblock %}
