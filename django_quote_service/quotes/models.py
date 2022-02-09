@@ -81,7 +81,7 @@ class Character(
     slug = models.SlugField(
         max_length=250,
         help_text=_(
-            "Global slug of the character, will be auto generated from name and group if not overriden."
+            "Global slug of the character, will be auto generated from name and group if not overridden."
         ),
         blank=True,
         unique=True,
@@ -128,8 +128,9 @@ class Quote(
     A quote from a given character.
     """
 
-    quote = models.TextField(
-        help_text="Plain text representation of quote. You can use Markdown here."
+    quote = models.CharField(
+        max_length=280,  # Keep the base limit to 280 so that quotes are 'tweetable'
+        help_text="Plain text representation of quote. You can use Markdown here.",
     )
     quote_rendered = models.TextField(
         null=True,

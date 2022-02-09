@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block extratitle %}{% blocktranslate %}Characters in {{ group.name }} - {% endblocktranslate %}{% endblock %}
+{% block content %}
+<h1>{% blocktranslate %}Characters in {{ group.name }}{% endblocktranslate %}</h1>
+  <ul>
+  {% for character in page_obj %}
+  <li><a href="{% url 'quotes:character_detail' slug=character.slug %}">{{ character.name }}</a>: <a href="{% url 'quotes:quote_list' character=character.slug %}" class="btn btn-outline-info">{{ character.quote_set.count }} {% translate "quotes" %}</a></li>
+  {% empty %}
+  <li>{% translate "No characters found!" %}</li>
+  {% endfor %}
+  </ul>
+  <nav aria-label="Page navigation">
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page=1">&laquo; {% trans "First" %}</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+    {% endif %}
+    <li class="page-item active" aria-current="page">{{ page_obj.number }}</li>
+    {% if page_obj.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.num_pages }}">{% trans "Last" %} &raquo;</a></li>
+    {% endif %}
+  </ul>
+  </nav>
+{% endblock %}

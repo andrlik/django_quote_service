@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block extratitle %}{{ character.name }} - {% endblock %}
+{% block content %}
+<h1>{{ character.name }}</h1>
+  {{ character.description_rendered }}
+  <p>{% translate "Number of quotes:" %} <a href="{% url 'quotes:quote_list' character=character.slug %}">{{ character.quote_set.count }}</a></p>
+  <p><small>{% blocktranslate %}Created at {{ character.created }}. Last modified at {{ character.modified }}.</small></p>
+  <a href="{% url 'quotes:character_update' slug=character.slug %}" class="btn btn-primary">{% translate "Edit character" %}</a> <a href="{% url "quotes:character_list" group=character.group.id %}" class="btn btn-secondary">{% translate "Back to character list" %}</a>
+
+  <p><a href="{% url 'quotes:character_delete' slug=character.slug %}" class="btn btn-danger">{% translate "Delete character" %}</a></p>
+{% endblock %}

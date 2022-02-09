@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n crispy_forms_filters %}
+{% block extratitle %}{% blocktranslate %}Edit quote{% endblocktranslate %} - {% endblock %}
+{% block content %}
+<h1>{% blocktranslate %}Edit quote{% endblocktranslate %}</h1>
+  <p>{% translate "This quote currently reads:" %}</p>
+  <blockquote>
+  {{ quote.quote_rendered }}
+  </blockquote>
+<p>{% translate "You can edit the quote using the form below." %}</p>
+<form method="post">{% csrf_token %}
+{{ form|crispy }}
+<button class="btn btn-success" type="submit">{% translate "Update quote" %}</button> <a href="{% url "quotes:quote_list" character=character.slug %}" class="btn btn-secondary">{% translate "Return to quote list" %}</a>
+</form>
+{% endblock %}
