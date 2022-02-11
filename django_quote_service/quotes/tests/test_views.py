@@ -358,6 +358,15 @@ def test_get_list_create_quotes_unauthorized(
     assert response.status_code == 403
 
 
+def test_list_quote_authorized(client, django_assert_max_num_queries, c_groups_user):
+    character = Character.objects.get(slug="group1-johnny-boy")
+    url = reverse("quotes:quote_list", kwargs={"character": character.slug})
+    client.force_login(c_groups_user)
+    with django_assert_max_num_queries(50):
+        response = client.get(url)
+    assert response.status_code == 200
+
+
 def test_unauthorized_create_quote(
     client, django_assert_max_num_queries, c_groups_user
 ):
@@ -376,6 +385,9 @@ def test_authorized_create_quote(client, django_assert_max_num_queries, c_groups
     quote_num = character.quote_set.count()
     url = reverse("quotes:quote_create", kwargs={"character": character.slug})
     client.force_login(c_groups_user)
+    with django_assert_max_num_queries(50):
+        response = client.get(url)
+    assert response.status_code == 200
     with django_assert_max_num_queries(50):
         response = client.post(url, data={"quote": "I want all the ham"})
     assert response.status_code == 302
@@ -409,6 +421,22 @@ def test_get_views_quote_detail_unauthorized(
     with django_assert_max_num_queries(50):
         response = client.get(url)
     assert response.status_code == 403
+
+
+@pytest.mark.parametrize(
+    "view_name", ["quotes:quote_detail", "quotes:quote_update", "quotes:quote_delete"]
+)
+def test_get_views_quote_detail_authorized(
+    client, django_assert_max_num_queries, c_groups_user, view_name
+):
+    quote = Quote.objects.select_related("character").filter(
+        character__slug="group1-johnny-boy"
+    )[0]
+    url = reverse(view_name, kwargs={"id": quote.id})
+    client.force_login(c_groups_user)
+    with django_assert_max_num_queries(50):
+        response = client.get(url)
+    assert response.status_code == 200
 
 
 def test_quote_edit_unauthorized(client, django_assert_max_num_queries, c_groups_user):
