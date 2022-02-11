@@ -36,7 +36,16 @@ class CharacterGroup(
     AbstractOwnerModel, RulesModelMixin, TimeStampedModel, metaclass=RulesModelBase
 ):
     """
-    An abstract group or source for a given set of quotes.
+    An abstract group or source for a given set of quotes. Multiple sources, or Character objects, can belong to the same group.
+
+    Attributes:
+        name (str): Human readable string to name the group. This will be converted to a slug prefix for each child Character.
+        description (str): A description of the group for convenience. Markdown can be used here for styling.
+        description_rendered (str): The HTML representation of the description string. Generated automatically.
+        owner (User): The user that created the group and therefore owns it.
+        public (bool): Is this group public or private. Defaults to False.
+        allow_submissions (bool): Allow other users to submit characters to this. Not yet implemented.
+
     """
 
     name = models.CharField(
@@ -75,6 +84,18 @@ class Character(
 ):
     """
     An individual character to attribute the quote to in the system.
+
+    Attributes:
+        name (str): Unique name of a character within a ``CharacterGroup`` for this entity.
+        group (CharacterGroup): The parent ``CharacterGroup``.
+        slug (str): Slug made up of a generated version of the character name and the group slug prefix.
+        description (str): Description for the character. Markdown can be used for styling.
+        description_rendered (str): HTML representation of the description for convenience. Automatically generated.
+        allow_markov (bool): Allow markov quotes to be requested from this character? Default False.
+        owner (User): The user that created and owns this character.
+        public (bool): Is the character public to other users? Defaults to False.
+        allow_submissions (bool): Allow other users to submit quotes for this character? Defaults to False. Not implemented.
+
     """
 
     name = models.CharField(max_length=100, help_text=_("Name of the character"))
@@ -126,6 +147,13 @@ class Quote(
 ):
     """
     A quote from a given character.
+
+    Attributes:
+        quote (str): The quote text to use. You can use Markdown for styling. Must be <= 280 characters so that it can be tweet-able.
+        quote_rendered (str): HTML rendered version of the quote field. Automatically generated.
+        character (Character): The character that said this quote.
+        owner (User): The user that created and owns this quote.
+
     """
 
     quote = models.CharField(
@@ -154,6 +182,15 @@ class Quote(
 
 
 class CharacterMarkovModel(TimeStampedModel):
+    """
+    The cached markov model for a given character.
+
+    Attributes:
+        character (Character): The character who the model is sourced from.
+        data (json): The JSON representation of the Markov model created by ``markovify``.
+
+    """
+
     character = models.OneToOneField(Character, on_delete=models.CASCADE)
     data = models.JSONField(null=True, blank=True)
 

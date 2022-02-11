@@ -12,6 +12,7 @@ Welcome to Django Quote Service's documentation!
 
    howto
    pycharm/configuration
+   managing_quotes
    users
 
 
