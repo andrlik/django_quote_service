@@ -66,6 +66,19 @@ class CharacterGroup(
     description_rendered = models.TextField(
         help_text=_("Automatically generated from description"), null=True, blank=True
     )
+    slug = models.SlugField(
+        unique=True,
+        max_length=70,
+        blank=True,
+        help_text=_("Unique slug for this group."),
+    )
+
+    def save(self, *args, **kwargs):
+        if (
+            not self.slug
+        ):  # Once this slug is set, it does not change except through devil pacts
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
     def __str__(self):  # pragma: nocover
         return self.name
@@ -131,7 +144,7 @@ class Character(
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(f"{self.group.name} {self.name}")
+            self.slug = self.group.slug + slugify(self.name)
         super().save(*args, **kwargs)
 
     class Meta:
