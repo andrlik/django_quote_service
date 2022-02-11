@@ -46,6 +46,7 @@ class CharacterGroup(
         owner (User): The user that created the group and therefore owns it.
         public (bool): Is this group public or private. Defaults to False.
         allow_submissions (bool): Allow other users to submit characters to this. Not yet implemented.
+        slug (str): A unique slug to represent this group. Generated automatically from name.
 
     """
 
@@ -66,6 +67,19 @@ class CharacterGroup(
     description_rendered = models.TextField(
         help_text=_("Automatically generated from description"), null=True, blank=True
     )
+    slug = models.SlugField(
+        unique=True,
+        max_length=70,
+        blank=True,
+        help_text=_("Unique slug for this group."),
+    )
+
+    def save(self, *args, **kwargs):
+        if (
+            not self.slug
+        ):  # Once this slug is set, it does not change except through devil pacts
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
     def __str__(self):  # pragma: nocover
         return self.name
@@ -131,7 +145,7 @@ class Character(
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(f"{self.group.name} {self.name}")
+            self.slug = f"{self.group.slug}-" + slugify(self.name)
         super().save(*args, **kwargs)
 
     class Meta:
