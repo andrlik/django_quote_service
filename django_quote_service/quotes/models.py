@@ -46,6 +46,7 @@ class CharacterGroup(
         owner (User): The user that created the group and therefore owns it.
         public (bool): Is this group public or private. Defaults to False.
         allow_submissions (bool): Allow other users to submit characters to this. Not yet implemented.
+        slug (str): A unique slug to represent this group. Generated automatically from name.
 
     """
 
