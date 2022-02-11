@@ -36,10 +36,11 @@ class CharacterGroup(
     AbstractOwnerModel, RulesModelMixin, TimeStampedModel, metaclass=RulesModelBase
 ):
     """
-    An abstract group or source for a given set of quotes. Multiple sources, or Character objects, can belong to the same group.
+    An abstract group or source for a given set of quotes. Multiple sources, or Character objects, can belong to
+    the same group.
 
     Attributes:
-        name (str): Human readable string to name the group. This will be converted to a slug prefix for each child Character.
+        name (str): Human readable string to name the group. This will be converted to a slug prefix.
         description (str): A description of the group for convenience. Markdown can be used here for styling.
         description_rendered (str): The HTML representation of the description string. Generated automatically.
         owner (User): The user that created the group and therefore owns it.
@@ -94,7 +95,7 @@ class Character(
         allow_markov (bool): Allow markov quotes to be requested from this character? Default False.
         owner (User): The user that created and owns this character.
         public (bool): Is the character public to other users? Defaults to False.
-        allow_submissions (bool): Allow other users to submit quotes for this character? Defaults to False. Not implemented.
+        allow_submissions (bool): Allow other users to submit quotes for this character? Defaults to False.
 
     """
 
@@ -149,7 +150,7 @@ class Quote(
     A quote from a given character.
 
     Attributes:
-        quote (str): The quote text to use. You can use Markdown for styling. Must be <= 280 characters so that it can be tweet-able.
+        quote (str): The quote text to use. You can use Markdown for styling. Must be <= 280 characters for tweets
         quote_rendered (str): HTML rendered version of the quote field. Automatically generated.
         character (Character): The character that said this quote.
         owner (User): The user that created and owns this quote.
