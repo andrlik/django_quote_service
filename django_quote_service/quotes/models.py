@@ -16,6 +16,11 @@ class AbstractOwnerModel(models.Model):
     """
     Abstract model for representing an entity owned by a user with toggles for either allowing submissions for it
     and public access. Defaults to completely private by default.
+
+    Attributes:
+        public (bool): is this object public to any authenticated user? Default: False
+        allow_submissions (bool): allow other users to submit child objects? Default: False. Not implemented yet.
+        owner (User): The user that created this object.
     """
 
     public = models.BooleanField(
@@ -40,6 +45,7 @@ class CharacterGroup(
     the same group.
 
     Attributes:
+        id (int): Database primary key for the object.
         name (str): Human readable string to name the group. This will be converted to a slug prefix.
         description (str): A description of the group for convenience. Markdown can be used here for styling.
         description_rendered (str): The HTML representation of the description string. Generated automatically.
@@ -47,6 +53,8 @@ class CharacterGroup(
         public (bool): Is this group public or private. Defaults to False.
         allow_submissions (bool): Allow other users to submit characters to this. Not yet implemented.
         slug (str): A unique slug to represent this group. Generated automatically from name.
+        created (datetime): When this object was first created. Auto-generated.
+        modified (datetime): Last time this object was modified. Auto-generated.
 
     """
 
@@ -101,6 +109,7 @@ class Character(
     An individual character to attribute the quote to in the system.
 
     Attributes:
+        id (int): Database primary key for the object.
         name (str): Unique name of a character within a ``CharacterGroup`` for this entity.
         group (CharacterGroup): The parent ``CharacterGroup``.
         slug (str): Slug made up of a generated version of the character name and the group slug prefix.
@@ -110,6 +119,8 @@ class Character(
         owner (User): The user that created and owns this character.
         public (bool): Is the character public to other users? Defaults to False.
         allow_submissions (bool): Allow other users to submit quotes for this character? Defaults to False.
+        created (datetime): When this object was first created. Auto-generated.
+        modified (datetime): Last time this object was modified. Auto-generated.
 
     """
 
@@ -164,10 +175,13 @@ class Quote(
     A quote from a given character.
 
     Attributes:
+        id (int): Database primary key for the object.
         quote (str): The quote text to use. You can use Markdown for styling. Must be <= 280 characters for tweets
         quote_rendered (str): HTML rendered version of the quote field. Automatically generated.
         character (Character): The character that said this quote.
         owner (User): The user that created and owns this quote.
+        created (datetime): When this object was first created. Auto-generated.
+        modified (datetime): Last time this object was modified. Auto-generated.
 
     """
 
@@ -201,6 +215,7 @@ class CharacterMarkovModel(TimeStampedModel):
     The cached markov model for a given character.
 
     Attributes:
+        id (int): Database primary key for the object.
         character (Character): The character who the model is sourced from.
         data (json): The JSON representation of the Markov model created by ``markovify``.
 
