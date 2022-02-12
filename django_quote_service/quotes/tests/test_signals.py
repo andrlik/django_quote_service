@@ -1,7 +1,15 @@
 import pytest
 
 from ...users.models import User
-from ..models import Character, CharacterGroup, CharacterMarkovModel, Quote
+from ..models import (
+    Character,
+    CharacterGroup,
+    CharacterMarkovModel,
+    CharacterStats,
+    GroupStats,
+    Quote,
+    QuoteStats,
+)
 
 pytestmark = pytest.mark.django_db(transaction=True)
 
@@ -66,3 +74,18 @@ def test_character_creation_allow_creates_markov_model_object(user: User) -> Non
     group = CharacterGroup.objects.create(name="Monkey", owner=user)
     character = Character.objects.create(name="Curious George", group=group, owner=user)
     assert CharacterMarkovModel.objects.get(character=character)
+
+
+def test_character_group_creation_generates_stats_object(user: User) -> None:
+    """
+    Test that the creation of either a character group or character creates its related
+    stats object.
+    """
+    group = CharacterGroup.objects.create(name="Monkey", owner=user)
+    assert GroupStats.objects.get(group=group)
+    character = Character.objects.create(name="Curious George", group=group, owner=user)
+    assert CharacterStats.objects.get(character=character)
+    quote = Quote.objects.create(
+        quote="I'm all a twitter.", character=character, owner=user
+    )
+    assert QuoteStats.objects.get(quote=quote)

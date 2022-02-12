@@ -1,7 +1,5 @@
 import rules
 from django.conf import settings
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -285,18 +283,41 @@ class QuoteStats(TimeStampedModel):
         return f"Stats for Quote {self.quote.id}"
 
 
-class QuoteUsageStats(TimeStampedModel):
+class GroupStats(TimeStampedModel):
     """
-    A generic object for using to track usage stats for objects like ``Character`` or ``CharacterGroup``.
+    An object for using to track usage stats for ``CharacterGroup``.
 
     Attributes:
+        group (CharacterGroup): The group this is collecting stats for.
         quotes_requested (int): The number of times a quote from this object or its children has been requested.
         quotes_generated (int): The number of times a markov quote has been generated for this or it's children.
     """
 
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.BigIntegerField()
-    content_object = GenericForeignKey(ct_field="content_type", fk_field="object_id")
+    group = models.OneToOneField(
+        CharacterGroup, related_name="stats", on_delete=models.CASCADE
+    )
+    quotes_requested = models.PositiveIntegerField(
+        default=0, help_text=_("Number of time child quotes have been requested.")
+    )
+    quotes_generated = models.PositiveIntegerField(
+        default=0,
+        help_text=_("Number of times markov generated quotes have been requested."),
+    )
+
+
+class CharacterStats(TimeStampedModel):
+    """
+    An object for using to track usage stats for ``Character``.
+
+    Attributes:
+        character (Character): The character this is collecting stats for.
+        quotes_requested (int): The number of times a quote from this object or its children has been requested.
+        quotes_generated (int): The number of times a markov quote has been generated for this or it's children.
+    """
+
+    character = models.OneToOneField(
+        Character, related_name="stats", on_delete=models.CASCADE
+    )
     quotes_requested = models.PositiveIntegerField(
         default=0, help_text=_("Number of time child quotes have been requested.")
     )

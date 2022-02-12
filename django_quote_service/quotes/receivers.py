@@ -2,7 +2,15 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from markdown import markdown
 
-from .models import Character, CharacterGroup, CharacterMarkovModel, Quote
+from .models import (
+    Character,
+    CharacterGroup,
+    CharacterMarkovModel,
+    CharacterStats,
+    GroupStats,
+    Quote,
+    QuoteStats,
+)
 
 
 @receiver(pre_save, sender=CharacterGroup)
@@ -32,3 +40,19 @@ def initialize_markov_object(sender, instance, created, *args, **kwargs):
     """
     if created:
         CharacterMarkovModel.objects.create(character=instance)
+
+
+@receiver(post_save, sender=CharacterGroup)
+@receiver(post_save, sender=Character)
+@receiver(post_save, sender=Quote)
+def initialize_grouping_stat_object(sender, instance, created, *args, **kwargs):
+    """
+    Creates the initial stat objects in the database.
+    """
+    if created:
+        if sender == CharacterGroup:
+            GroupStats.objects.create(group=instance)
+        elif sender == Character:
+            CharacterStats.objects.create(character=instance)
+        elif sender == Quote:
+            QuoteStats.objects.create(quote=instance)
