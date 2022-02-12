@@ -223,7 +223,8 @@ class Quote(
 
 class CharacterMarkovModel(TimeStampedModel):
     """
-    The cached markov model for a given character.
+    The cached markov model for a given character. The databse object for this is automatically created
+    whenever a new character object is saved.
 
     Attributes:
         id (int): Database primary key for the object.

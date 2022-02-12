@@ -1,7 +1,7 @@
 import pytest
 
 from ...users.models import User
-from ..models import Character, CharacterGroup, Quote
+from ..models import Character, CharacterGroup, CharacterMarkovModel, Quote
 
 pytestmark = pytest.mark.django_db(transaction=True)
 
@@ -57,3 +57,12 @@ def test_quote_rendering(user: User) -> None:
         character=character, owner=user, quote="A **dark** time for all."
     )
     assert quote.quote_rendered == "<p>A <strong>dark</strong> time for all.</p>"
+
+
+def test_character_creation_allow_creates_markov_model_object(user: User) -> None:
+    """
+    Test that creating a character also creates it's related markov model with initially empty data.
+    """
+    group = CharacterGroup.objects.create(name="Monkey", owner=user)
+    character = Character.objects.create(name="Curious George", group=group, owner=user)
+    assert CharacterMarkovModel.objects.get(character=character)
