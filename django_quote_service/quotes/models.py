@@ -1,6 +1,7 @@
 import rules
 from django.conf import settings
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
 from rules.contrib.models import RulesModelBase, RulesModelMixin
@@ -81,6 +82,23 @@ class CharacterGroup(
         blank=True,
         help_text=_("Unique slug for this group."),
     )
+
+    @cached_property
+    def total_characters(self):
+        return Character.objects.filter(group=self).count()
+
+    @cached_property
+    def markov_characters(self):
+        return Character.objects.filter(group=self, allow_markov=True).count()
+
+    def refresh_from_db(self, *args, **kwargs):
+        super().refresh_from_db(*args, **kwargs)
+        cached_properties = ["total_characters", "markov_characters"]
+        for prop in cached_properties:
+            try:
+                del self.__dict__[prop]
+            except KeyError:  # pragma: nocover
+                pass
 
     def save(self, *args, **kwargs):
         if (

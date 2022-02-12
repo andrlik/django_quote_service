@@ -59,3 +59,37 @@ def test_reject_character_duplicate_slug(
         Character.objects.create(
             name=character_name, group=group2, slug=slug, owner=user
         )
+
+
+@pytest.fixture
+def property_group(user: User) -> CharacterGroup:
+    cg = CharacterGroup.objects.create(name="Wranglin Robots", owner=user)
+    for x in range(10):
+        allow_markov = False
+        if x % 2 == 0:
+            allow_markov = True
+        Character.objects.create(
+            name=str(x), group=cg, allow_markov=allow_markov, owner=user
+        )
+    yield cg
+    cg.delete()
+
+
+def test_group_properties_calculation(property_group: CharacterGroup) -> None:
+    assert property_group.total_characters == 10
+    assert property_group.markov_characters == 5
+
+
+def test_refresh_from_db_also_updates_cached_properties(
+    property_group: CharacterGroup, user: User
+) -> None:
+    assert property_group.total_characters == 10
+    assert property_group.markov_characters == 5
+    Character.objects.create(
+        name="IamNew", group=property_group, allow_markov=True, owner=user
+    )
+    assert property_group.total_characters == 10
+    assert property_group.markov_characters == 5
+    property_group.refresh_from_db()
+    assert property_group.total_characters == 11
+    assert property_group.markov_characters == 6
