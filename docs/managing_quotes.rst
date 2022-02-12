@@ -36,7 +36,7 @@ Character Group List
 
 Provides a paginated list of character groups created by logged in user.
 
-Served at ``/quotes/groups/``.
+Served at ``/app/groups/``.
 
 .. _CharacterGroupCreateView:
 
@@ -45,7 +45,7 @@ Character Group Create
 
 Allows a user to define a new :ref:`Character Group`.
 
-Served at ``quotes/groups/create/``.
+Served at ``app/groups/create/``.
 
 .. _CharacterGroupDetailView:
 
@@ -54,7 +54,7 @@ Character Group Detail
 
 Displays a detailed view of a character group with a sampling of the :ref:`Character` objects associated, with links to full listings.
 
-Served at ``quotes/groups/<id>/``.
+Served at ``app/groups/<id>/``.
 
 .. _CharacterGroupUpdateView:
 
@@ -63,7 +63,7 @@ Character Group Update
 
 Allows user to update the character group's attributes.
 
-Served at ``quotes/groups/<id>/edit/``.
+Served at ``app/groups/<id>/edit/``.
 
 .. _CharacterGroupDeleteView:
 
@@ -72,7 +72,7 @@ Character Group Delete
 
 Allows user to delete a :ref:`Character Group` and all child data associated with it.
 
-Served at ``quotes/groups/<id>/delete/``.
+Served at ``app/groups/<id>/delete/``.
 
 .. _CharacterListView:
 
@@ -81,7 +81,7 @@ Character List
 
 Paginated list of all the :ref:`Character` objects associated with a given group, along with aggregate statistics such as total quotes.
 
-Served at ``quotes/groups/<id>/characters/``.
+Served at ``app/groups/<id>/characters/``.
 
 .. _CharacterCreateView:
 
@@ -90,7 +90,7 @@ Character Create
 
 Enables a user to create a new :ref:`Character` for a given :ref:`Character Group`.
 
-Served at ``quotes/groups/<id>/characters/create/``.
+Served at ``app/groups/<id>/characters/create/``.
 
 
 .. _CharacterDetailView:
@@ -100,7 +100,7 @@ Character Detail
 
 Detail view of the :ref:`Character` object including a sampling of recently created/modified quotes with links to full listings.
 
-Served at ``quotes/characters/<character-slug>/``.
+Served at ``app/characters/<character-slug>/``.
 
 .. _CharacterUpdateView:
 
@@ -109,7 +109,7 @@ Character Update
 
 Enables editing of the character attributes such as name, description, whether to allow markov requests, etc.
 
-Served at ``quotes/characters/<character-slug>/edit/``.
+Served at ``app/characters/<character-slug>/edit/``.
 
 .. _CharacterDeleteView:
 
@@ -118,7 +118,7 @@ Character Delete
 
 Enable deleting a character and all child data associated with it.
 
-Served at ``quotes/characters/<character-slug>/delete/``.
+Served at ``app/characters/<character-slug>/delete/``.
 
 .. _QuoteListView:
 
@@ -127,7 +127,7 @@ Quote List
 
 Provides a paginated list of quotes created for the given :ref:`Character`.
 
-Served at ``quotes/characters/<character-slug>/quotes/``.
+Served at ``app/characters/<character-slug>/quotes/``.
 
 .. _QuoteCreateView:
 
@@ -136,7 +136,7 @@ Quote Create
 
 Add a quote for the given :ref:`Character`.
 
-Served at ``quotes/characters/<character-slug/quotes/create/``.
+Served at ``app/characters/<character-slug/quotes/create/``.
 
 .. _QuoteDetailView:
 
@@ -145,7 +145,7 @@ Quote Detail
 
 Shows details of the quote including the HTML rendered version of the text, and in the future will also include statistical data.
 
-Served at ``quotes/quotes/<id>/``.
+Served at ``app/quotes/<id>/``.
 
 .. _QuoteUpdateView:
 
@@ -154,7 +154,7 @@ Quote Update
 
 Enables the user to update the quote text for a given :ref:`Quote` object.
 
-Served at ``quotes/quotes/<id>/edit/``.
+Served at ``app/quotes/<id>/edit/``.
 
 .. _QuoteDeleteView:
 
@@ -163,4 +163,4 @@ Quote Delete
 
 Enables the user to delete a given :ref:`Quote` object.
 
-Served at ``quotes/quotes/<id>/delete/``.
+Served at ``app/quotes/<id>/delete/``.
