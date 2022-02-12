@@ -229,6 +229,8 @@ class CharacterMarkovModel(TimeStampedModel):
         id (int): Database primary key for the object.
         character (Character): The character who the model is sourced from.
         data (json): The JSON representation of the Markov model created by ``markovify``.
+        created (datetime): When this object was first created. Auto-generated.
+        modified (datetime): Last time this object was modified. Auto-generated.
 
     """
 
