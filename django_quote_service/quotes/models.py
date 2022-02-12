@@ -1,6 +1,7 @@
 import rules
 from django.conf import settings
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
 from rules.contrib.models import RulesModelBase, RulesModelMixin
@@ -81,6 +82,23 @@ class CharacterGroup(
         blank=True,
         help_text=_("Unique slug for this group."),
     )
+
+    @cached_property
+    def total_characters(self):
+        return Character.objects.filter(group=self).count()
+
+    @cached_property
+    def markov_characters(self):
+        return Character.objects.filter(group=self, allow_markov=True).count()
+
+    def refresh_from_db(self, *args, **kwargs):
+        super().refresh_from_db(*args, **kwargs)
+        cached_properties = ["total_characters", "markov_characters"]
+        for prop in cached_properties:
+            try:
+                del self.__dict__[prop]
+            except KeyError:  # pragma: nocover
+                pass
 
     def save(self, *args, **kwargs):
         if (
@@ -240,3 +258,70 @@ class CharacterMarkovModel(TimeStampedModel):
 
     def __str__(self):  # pragma: nocover
         return self.character.name
+
+
+class QuoteStats(TimeStampedModel):
+    """
+    A simple object used to track how often an individual quote is used.
+
+    Attributes:
+        id (int): The database primary key of this object.
+        quote (Quote): The quote this stat relates to.
+        times_used (int): The number of times this has been used by an service such as random quote.
+        created (datetime): When this was created.
+        modified (datetime): When this was last modified.
+    """
+
+    quote = models.OneToOneField(
+        Quote, on_delete=models.CASCADE, help_text=_("The Quote the stats related to.")
+    )
+    times_used = models.PositiveIntegerField(
+        default=0, help_text=_("Times used for random quotes, etc.")
+    )
+
+    def __str__(self):  # pragma: nocover
+        return f"Stats for Quote {self.quote.id}"
+
+
+class GroupStats(TimeStampedModel):
+    """
+    An object for using to track usage stats for ``CharacterGroup``.
+
+    Attributes:
+        group (CharacterGroup): The group this is collecting stats for.
+        quotes_requested (int): The number of times a quote from this object or its children has been requested.
+        quotes_generated (int): The number of times a markov quote has been generated for this or it's children.
+    """
+
+    group = models.OneToOneField(
+        CharacterGroup, related_name="stats", on_delete=models.CASCADE
+    )
+    quotes_requested = models.PositiveIntegerField(
+        default=0, help_text=_("Number of time child quotes have been requested.")
+    )
+    quotes_generated = models.PositiveIntegerField(
+        default=0,
+        help_text=_("Number of times markov generated quotes have been requested."),
+    )
+
+
+class CharacterStats(TimeStampedModel):
+    """
+    An object for using to track usage stats for ``Character``.
+
+    Attributes:
+        character (Character): The character this is collecting stats for.
+        quotes_requested (int): The number of times a quote from this object or its children has been requested.
+        quotes_generated (int): The number of times a markov quote has been generated for this or it's children.
+    """
+
+    character = models.OneToOneField(
+        Character, related_name="stats", on_delete=models.CASCADE
+    )
+    quotes_requested = models.PositiveIntegerField(
+        default=0, help_text=_("Number of time child quotes have been requested.")
+    )
+    quotes_generated = models.PositiveIntegerField(
+        default=0,
+        help_text=_("Number of times markov generated quotes have been requested."),
+    )
