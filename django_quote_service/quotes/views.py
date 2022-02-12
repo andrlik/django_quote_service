@@ -270,7 +270,7 @@ class QuoteCreateView(LoginRequiredMixin, PermissionRequiredMixin, GenericCreate
     model = Quote
     template_name = "quotes/quote_create.html"
     permission_required = "quotes.edit_character"
-    fields = ["quote"]
+    fields = ["quote", "citation", "citation_url"]
 
     def dispatch(self, request, *args, **kwargs):
         character_slug = kwargs.pop("character")
@@ -314,7 +314,7 @@ class QuoteUpdateView(LoginRequiredMixin, PermissionRequiredMixin, GenericUpdate
     model = Quote
     permission_required = "quotes.edit_quote"
     template_name = "quotes/quote_update.html"
-    fields = ["quote"]
+    fields = ["quote", "citation", "citation_url"]
     pk_url_kwarg = "id"
 
     def form_valid(self, form):

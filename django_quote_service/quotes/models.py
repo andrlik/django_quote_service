@@ -178,6 +178,8 @@ class Quote(
         id (int): Database primary key for the object.
         quote (str): The quote text to use. You can use Markdown for styling. Must be <= 280 characters for tweets
         quote_rendered (str): HTML rendered version of the quote field. Automatically generated.
+        citation (str): Optional description of quote source, e.g. episode number or book title.
+        citation_url (str): Optional accompanying URL for the citation.
         character (Character): The character that said this quote.
         owner (User): The user that created and owns this quote.
         created (datetime): When this object was first created. Auto-generated.
@@ -196,6 +198,15 @@ class Quote(
     )
     character = models.ForeignKey(
         Character, on_delete=models.CASCADE, help_text=_("The character who said this.")
+    )
+    citation = models.CharField(
+        max_length=250,
+        blank=True,
+        null=True,
+        help_text=_("Where is this quote from? Episode #, book?"),
+    )
+    citation_url = models.URLField(
+        null=True, blank=True, help_text=_("URL for citation, if applicable.")
     )
 
     def __str__(self):  # pragma: nocover
