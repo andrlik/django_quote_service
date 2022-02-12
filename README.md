@@ -4,6 +4,8 @@ A simple project that takes collections of quotes and then exposes an API for bo
 
 [![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
 [![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/andrlik/django_quote_service/blob/main/.pre-commit-config.yaml)
+[![License](https://img.shields.io/github/license/andrlik/django_quote_service)](https://github.com/andrlik/django_quote_service/blob/main/LICENSE)
 ![Test results](https://github.com/andrlik/django_quote_service/actions/workflows/ci.yml/badge.svg)
 ![Codestyle check results](https://github.com/andrlik/django_quote_service/actions/workflows/codestyle.yml/badge.svg)
 [![Documentation Status](https://readthedocs.org/projects/django-quote-service/badge/?version=latest)](https://django-quote-service.readthedocs.io/en/latest/?badge=latest)
