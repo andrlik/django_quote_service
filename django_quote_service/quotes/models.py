@@ -1,5 +1,7 @@
 import rules
 from django.conf import settings
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -258,3 +260,47 @@ class CharacterMarkovModel(TimeStampedModel):
 
     def __str__(self):  # pragma: nocover
         return self.character.name
+
+
+class QuoteStats(TimeStampedModel):
+    """
+    A simple object used to track how often an individual quote is used.
+
+    Attributes:
+        id (int): The database primary key of this object.
+        quote (Quote): The quote this stat relates to.
+        times_used (int): The number of times this has been used by an service such as random quote.
+        created (datetime): When this was created.
+        modified (datetime): When this was last modified.
+    """
+
+    quote = models.OneToOneField(
+        Quote, on_delete=models.CASCADE, help_text=_("The Quote the stats related to.")
+    )
+    times_used = models.PositiveIntegerField(
+        default=0, help_text=_("Times used for random quotes, etc.")
+    )
+
+    def __str__(self):  # pragma: nocover
+        return f"Stats for Quote {self.quote.id}"
+
+
+class QuoteUsageStats(TimeStampedModel):
+    """
+    A generic object for using to track usage stats for objects like ``Character`` or ``CharacterGroup``.
+
+    Attributes:
+        quotes_requested (int): The number of times a quote from this object or its children has been requested.
+        quotes_generated (int): The number of times a markov quote has been generated for this or it's children.
+    """
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.BigIntegerField()
+    content_object = GenericForeignKey(ct_field="content_type", fk_field="object_id")
+    quotes_requested = models.PositiveIntegerField(
+        default=0, help_text=_("Number of time child quotes have been requested.")
+    )
+    quotes_generated = models.PositiveIntegerField(
+        default=0,
+        help_text=_("Number of times markov generated quotes have been requested."),
+    )
