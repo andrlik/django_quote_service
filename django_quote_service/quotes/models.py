@@ -1,3 +1,5 @@
+from typing import Optional, Union
+
 import rules
 from django.conf import settings
 from django.db import models
@@ -7,6 +9,7 @@ from model_utils.models import TimeStampedModel
 from rules.contrib.models import RulesModelBase, RulesModelMixin
 from slugify import slugify
 
+from .markov_utils import MarkovPOSText
 from .rules import (  # is_character_owner,; is_group_owner_and_authenticated,
     is_owner,
     is_owner_or_public,
@@ -169,6 +172,33 @@ class Character(
         help_text=_("The group this character belongs to."),
     )
 
+    @property
+    def markov_ready(self) -> bool:
+        """
+        Conducts sanity checks to see if requesting a markov chain is feasible.
+        :return: bool
+        """
+        if self.allow_markov and Quote.objects.filter(character=self).count() > 1:
+            return True
+        return False
+
+    def get_markov_sentence(
+        self, max_characters: Optional[int] = 280
+    ) -> Union[str, None]:
+        """
+        If valid, generate a markov sentence. If not, return None.
+        :param max_characters: Optional maximum limit of characters in the return set. Default: 280
+        :return: str or None
+        """
+        if self.markov_ready:
+            markov_model = CharacterMarkovModel.objects.get(character=self)
+            if not markov_model.data:
+                markov_model.generate_model_from_corpus()
+
+            text_model = MarkovPOSText.from_json(markov_model.data)
+            return text_model.make_short_sentence(max_chars=max_characters)
+        return None
+
     def __str__(self):  # pragma: nocover
         return self.name
 
@@ -255,6 +285,21 @@ class CharacterMarkovModel(TimeStampedModel):
 
     character = models.OneToOneField(Character, on_delete=models.CASCADE)
     data = models.JSONField(null=True, blank=True)
+
+    def generate_model_from_corpus(self):
+        """
+        Collect all quotes attributed to the related character. Then
+        create, compile, and save the model.
+        """
+        quotes = Quote.objects.filter(character=self.character)
+        # Don't bother generating model if there isn't data.
+        if not quotes.exists():
+            return  # pragma: nocover
+        corpus = " ".join(quote.quote for quote in quotes)
+        text_model = MarkovPOSText(corpus)
+        text_model.compile(inplace=True)
+        self.data = text_model.to_json()
+        self.save()
 
     def __str__(self):  # pragma: nocover
         return self.character.name
