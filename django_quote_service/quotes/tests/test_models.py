@@ -62,7 +62,7 @@ def test_reject_character_duplicate_slug(
 
 
 @pytest.fixture
-def property_group(user: User) -> CharacterGroup:
+def property_group(user):
     cg = CharacterGroup.objects.create(name="Wranglin Robots", owner=user)
     for x in range(10):
         allow_markov = False

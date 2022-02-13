@@ -32,7 +32,7 @@ class CharacterGroupListView(LoginRequiredMixin, GenericList):
     allow_empty = True
 
     def get_queryset(self):
-        return CharacterGroup.objects.filter(owner=self.request.user)
+        return CharacterGroup.objects.filter(owner=self.request.user)  # type: ignore
 
 
 class CharacterGroupDetailView(
@@ -294,7 +294,7 @@ class QuoteCreateView(LoginRequiredMixin, PermissionRequiredMixin, GenericCreate
                 self.request,
                 _(f"This quote for character {self.character.name} already exists."),
             )
-            return self.form_invalid(self, form)
+            return self.form_invalid(form)
         form.instance.character = self.character
         form.instance.owner = self.request.user
         form.save()
