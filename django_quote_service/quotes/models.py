@@ -1,4 +1,5 @@
-from typing import Optional, Union
+import random
+from typing import Optional, Any
 
 import rules
 from django.conf import settings
@@ -182,9 +183,7 @@ class Character(
             return True
         return False
 
-    def get_markov_sentence(
-        self, max_characters: Optional[int] = 280
-    ) -> Union[str, None]:
+    def get_markov_sentence(self, max_characters: Optional[int] = 280) -> Optional[str]:
         """
         If valid, generate a markov sentence. If not, return None.
         :param max_characters: Optional maximum limit of characters in the return set. Default: 280
@@ -194,9 +193,27 @@ class Character(
             markov_model = CharacterMarkovModel.objects.get(character=self)
             if not markov_model.data:
                 markov_model.generate_model_from_corpus()
-
             text_model = MarkovPOSText.from_json(markov_model.data)
             return text_model.make_short_sentence(max_chars=max_characters)
+        return None
+
+    def get_random_quote(
+        self, max_quotes_to_process: Optional[int] = 50
+    ) -> Optional[Any]:
+        """
+        This actually not all that random. It's going to grab the quotes
+        ordered ordered by how infrequently they've been returned, and then grab a random one
+        in the set. But for our purposes, it's fine. If there aren't any quotes, it will return None.
+        :return: Quote object or None
+        """
+        quotes_to_pick = (
+            Quote.objects.filter(character=self)
+            .select_related("stats")
+            .order_by("stats__times_used")[:max_quotes_to_process]
+        )
+        if quotes_to_pick.exists():
+            # Select a random index in the result set.
+            return random.choice(list(quotes_to_pick))
         return None
 
     def __str__(self):  # pragma: nocover
@@ -318,7 +335,10 @@ class QuoteStats(TimeStampedModel):
     """
 
     quote = models.OneToOneField(
-        Quote, on_delete=models.CASCADE, help_text=_("The Quote the stats related to.")
+        Quote,
+        on_delete=models.CASCADE,
+        related_name="stats",
+        help_text=_("The Quote the stats related to."),
     )
     times_used = models.PositiveIntegerField(
         default=0, help_text=_("Times used for random quotes, etc.")
