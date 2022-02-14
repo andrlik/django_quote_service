@@ -10,6 +10,7 @@ from ..models import (
     Quote,
     QuoteStats,
 )
+from ..signals import markov_sentence_generated, quote_random_retrieved
 
 pytestmark = pytest.mark.django_db(transaction=True)
 
@@ -89,3 +90,53 @@ def test_character_group_creation_generates_stats_object(user: User) -> None:
         quote="I'm all a twitter.", character=character, owner=user
     )
     assert QuoteStats.objects.get(quote=quote)
+
+
+@pytest.fixture
+def statable_character(user):
+    """
+    Create a character suitable for stat collection.
+    :param user: A user who owns the record.
+    :return: Character object
+    """
+    group = CharacterGroup.objects.create(name="Monkey", owner=user)
+    character = Character.objects.create(name="Curious George", group=group, owner=user)
+    Quote.objects.create(quote="Silly little monkey.", character=character, owner=user)
+    Quote.objects.create(
+        quote="I need bananas or else I get the shakes.",
+        character=character,
+        owner=user,
+    )
+    Quote.objects.create(
+        quote="I'm going to take your thumbs first.", character=character, owner=user
+    )
+    yield character
+    group.delete()
+
+
+def test_quote_retrieve_stat_signal(statable_character):
+    """
+    Test that stat are updated correctly when the signal is fired.
+    :param statable_character: An instance of Character with stat objects attached
+    """
+    char_quotes_requested = statable_character.stats.quotes_requested
+    group_quotes_requested = statable_character.group.stats.quotes_requested
+    quote = statable_character.quote_set.all()[0]
+    quote_usage = quote.stats.times_used
+    quote_random_retrieved.send(
+        Character, instance=statable_character, quote_retrieved=quote
+    )
+    statable_character.refresh_from_db()
+    quote.refresh_from_db()
+    assert char_quotes_requested < statable_character.stats.quotes_requested
+    assert group_quotes_requested < statable_character.group.stats.quotes_requested
+    assert quote_usage < quote.stats.times_used
+
+
+def test_markov_stat_signal(statable_character):
+    char_quotes_generated = statable_character.stats.quotes_generated
+    group_quotes_generated = statable_character.group.stats.quotes_generated
+    markov_sentence_generated.send(Character, instance=statable_character)
+    statable_character.refresh_from_db()
+    assert char_quotes_generated < statable_character.stats.quotes_generated
+    assert group_quotes_generated < statable_character.group.stats.quotes_generated
