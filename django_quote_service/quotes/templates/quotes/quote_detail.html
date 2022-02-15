@@ -3,7 +3,7 @@
 {% block extratitle %}{% blocktranslate %}Quote {{ quote.id }} from {{ quote.character.name }}{% endblocktranslate %} - {% endblock %}
 {% block content %}
 <h1>{% blocktranslate %}Quote {{ quote.id }} from {{ quote.character.name }}{% endblocktranslate %}</h1>
-<blockquote>{{ quote.quote_rendered }}</blockquote>
+<blockquote>{{ quote.quote_rendered|safe }}</blockquote>
 <a href="{% url 'quotes:quote_update' quote=quote.id %}" class="btn btn-primary">{% translate "Edit" %}</a> <a href="{% url 'quotes:quote_list' character=quote.character.slug %}" class="btn btn-secondary">{% translate "Back to quote list" %}</a>
 <p><a href="{% url 'quotes:quote_delete' quote=quote.id %}" class="btn btn-danger">{% translate "Delete" %}</a></p>
 {% endblock %}
