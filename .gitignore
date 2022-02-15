@@ -326,8 +326,6 @@ tags
 django_quote_service/media/
 
 .pytest_cache/
-project.css
-project.min.css
 vendors.js
 *.min.js
 .env
