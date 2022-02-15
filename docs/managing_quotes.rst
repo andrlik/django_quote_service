@@ -211,3 +211,34 @@ Quote Delete
 Enables the user to delete a given :ref:`Quote` object.
 
 Served at ``app/quotes/<int:quote>/delete/``.
+
+
+Signals
+=======
+
+There are two signals provided that are used to update statistics related to :ref:`CharacterGroup`, :ref:`Character`,
+and :ref:`Quote` objects. If you implement your own methods and want to ensure your stats related to
+``quotes_requested`` and ``quotes_generated`` remain accurate, you will need to send these.
+
+.. _quote_retrieved:
+
+Quote Retrieved
+---------------
+
+.. method:: django_quote_service.quotes.signals.quote_random_retrieved.send(sender, instance, quote_retrieved, *args, **kwargs)
+
+   The ``sender`` should in most contexts be either :ref:`Character` or in rare cases, :ref:`CharacterGroup`.
+   The ``instance`` should be the actual instance of the :ref:`Character` object that is being used, and
+   ``quote_retrieved`` should be an instance of :ref:`Quote`. This signal will trigger updates on the relevant fields
+   in :ref:`GroupStats`, :ref:`CharacterStats`, and :ref:`QuoteStats` respectively.
+
+.. _quote_generated:
+
+Quote Generated
+---------------
+
+.. method:: django_quote_service.quotes.signals.markov_sentence_generated.send(sender, instance, *args, **kwargs)
+
+   The ``sender`` should in most contexts be either :ref:`Character` or in rare cases, :ref:`CharacterGroup`.
+   The ``instance`` should be the actual instance of the :ref:`Character` that is being used.
+   This signal will update the ``quotes_generated`` stats in both :ref:`GroupStats` and :ref:`CharacterStats`.
