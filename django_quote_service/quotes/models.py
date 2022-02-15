@@ -177,16 +177,19 @@ class Character(
     @property
     def markov_ready(self) -> bool:
         """
-        Conducts sanity checks to see if requesting a markov chain is feasible.
+        Conducts sanity checks to see if requesting a markov chain is feasible. Markov must be enabled for a character
+        and there must be a sufficient corpus to generate a sentence from. Currently set at a minimum of 10 quotes.
+
         :return: bool
         """
-        if self.allow_markov and Quote.objects.filter(character=self).count() > 1:
+        if self.allow_markov and Quote.objects.filter(character=self).count() > 10:
             return True
         return False
 
     def get_markov_sentence(self, max_characters: Optional[int] = 280) -> Optional[str]:
         """
         If valid, generate a markov sentence. If not, return None.
+
         :param max_characters: Optional maximum limit of characters in the return set. Default: 280
         :return: str or None
         """
@@ -209,7 +212,8 @@ class Character(
         This actually not all that random. It's going to grab the quotes
         ordered ordered by how infrequently they've been returned, and then grab a random one
         in the set. But for our purposes, it's fine. If there aren't any quotes, it will return None.
-        :return: Quote object or None
+
+        :return: ``Quote`` object or None
         """
         quotes_to_pick = (
             Quote.objects.filter(character=self)
@@ -316,9 +320,9 @@ class CharacterMarkovModel(TimeStampedModel):
         logger.debug("Generating text model. Fetching quotes.")
         quotes = Quote.objects.filter(character=self.character)
         # Don't bother generating model if there isn't data.
-        if not quotes.exists():
+        if not quotes.exists():  # pragma: nocover
             logger.debug("There are no quotes. Returning None.")
-            return  # pragma: nocover
+            return
         logger.debug("Quotes retrieved! Forming into corpus.")
         corpus = " ".join(quote.quote for quote in quotes)
         logger.debug("Building text model.")
