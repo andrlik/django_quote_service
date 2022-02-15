@@ -16,9 +16,9 @@
   <tbody>
   {% for quote in page_obj %}
   <tr>
-    <th scope="row"><a href="{% url 'quotes:quote_detail' id=quote.id %}">{{ quote.id }}</a></th>
+    <th scope="row"><a href="{% url 'quotes:quote_detail' quote=quote.id %}">{{ quote.id }}</a></th>
     <td>{{ quote.quote_rendered }}</td>
-    <td><a href="{% url 'quotes:quote_update' id=quote.id %}" class="btn btn-primary">{% translate "Edit" %}</a> <a href="{% url 'quotes:quote_delete' id=quote.id %}" class="btn btn-danger">{% translate "Delete" %}</a></td>
+    <td><a href="{% url 'quotes:quote_update' quote=quote.id %}" class="btn btn-primary">{% translate "Edit" %}</a> <a href="{% url 'quotes:quote_delete' quote=quote.id %}" class="btn btn-danger">{% translate "Delete" %}</a></td>
   </tr>
   {% empty %}
     <tr>
