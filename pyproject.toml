@@ -39,6 +39,8 @@ Markdown = "^3.3.6"
 Sphinx = {version = "^4.4.0", optional=true}
 sphinx-autobuild = {version = "^2021.3.14", optional=true}
 django-braces = "^1.15.0"
+spacy = "^3.2.2"
+django-easy-logging = "^0.1.0"
 
 [tool.poetry.dev-dependencies]
 Werkzeug = {extras = ["watchdog"], version = "^2.0.2"}
@@ -65,6 +67,9 @@ django-coverage-plugin = "^2.0.2"
 pytest-django = "^4.5.2"
 pytest-cov = "^3.0.0"
 sphinx-rtd-theme = "^1.0.0"
+
+[tool.poetry.dependencies.en_core_web_sm]
+url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.2.0/en_core_web_sm-3.2.0.tar.gz"
 
 [tool.poetry.extras]
 docs = ["sphinx", "sphinx-autobuild"]

@@ -2,7 +2,6 @@ import pytest
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 
-from ...users.models import User
 from ...users.tests.factories import UserFactory
 from ..models import Character, CharacterGroup, Quote
 
@@ -12,7 +11,7 @@ pytestmark = pytest.mark.django_db(transaction=True)
 
 
 @pytest.fixture
-def c_groups_user(user: User) -> User:
+def c_groups_user(user):
     """
 
     :param user: A user object from the user fixture

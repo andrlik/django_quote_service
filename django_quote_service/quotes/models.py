@@ -1,12 +1,17 @@
+import random
+from typing import Any, Optional
+
 import rules
 from django.conf import settings
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
+from loguru import logger
 from model_utils.models import TimeStampedModel
 from rules.contrib.models import RulesModelBase, RulesModelMixin
 from slugify import slugify
 
+from .markov_utils import MarkovPOSText
 from .rules import (  # is_character_owner,; is_group_owner_and_authenticated,
     is_owner,
     is_owner_or_public,
@@ -169,6 +174,57 @@ class Character(
         help_text=_("The group this character belongs to."),
     )
 
+    @property
+    def markov_ready(self) -> bool:
+        """
+        Conducts sanity checks to see if requesting a markov chain is feasible. Markov must be enabled for a character
+        and there must be a sufficient corpus to generate a sentence from. Currently set at a minimum of 10 quotes.
+
+        :return: bool
+        """
+        if self.allow_markov and Quote.objects.filter(character=self).count() > 10:
+            return True
+        return False
+
+    def get_markov_sentence(self, max_characters: Optional[int] = 280) -> Optional[str]:
+        """
+        If valid, generate a markov sentence. If not, return None.
+
+        :param max_characters: Optional maximum limit of characters in the return set. Default: 280
+        :return: str or None
+        """
+        logger.debug("Checking to see if character is markov ready...")
+        if self.markov_ready:
+            logger.debug("It IS ready. Fetching markov model.")
+            markov_model = CharacterMarkovModel.objects.get(character=self)
+            if not markov_model.data:
+                logger.debug("No model defined yet, generating...")
+                markov_model.generate_model_from_corpus()
+            text_model = MarkovPOSText.from_json(markov_model.data)
+            logger.debug("Markov text model loaded. Generating sentence.")
+            return text_model.make_short_sentence(max_chars=max_characters)
+        return None
+
+    def get_random_quote(
+        self, max_quotes_to_process: Optional[int] = 50
+    ) -> Optional[Any]:
+        """
+        This actually not all that random. It's going to grab the quotes
+        ordered ordered by how infrequently they've been returned, and then grab a random one
+        in the set. But for our purposes, it's fine. If there aren't any quotes, it will return None.
+
+        :return: ``Quote`` object or None
+        """
+        quotes_to_pick = (
+            Quote.objects.filter(character=self)
+            .select_related("stats")
+            .order_by("stats__times_used")[:max_quotes_to_process]
+        )
+        if quotes_to_pick.exists():
+            # Select a random index in the result set.
+            return random.choice(list(quotes_to_pick))
+        return None
+
     def __str__(self):  # pragma: nocover
         return self.name
 
@@ -256,6 +312,28 @@ class CharacterMarkovModel(TimeStampedModel):
     character = models.OneToOneField(Character, on_delete=models.CASCADE)
     data = models.JSONField(null=True, blank=True)
 
+    def generate_model_from_corpus(self):
+        """
+        Collect all quotes attributed to the related character. Then
+        create, compile, and save the model.
+        """
+        logger.debug("Generating text model. Fetching quotes.")
+        quotes = Quote.objects.filter(character=self.character)
+        # Don't bother generating model if there isn't data.
+        if not quotes.exists():  # pragma: nocover
+            logger.debug("There are no quotes. Returning None.")
+            return
+        logger.debug("Quotes retrieved! Forming into corpus.")
+        corpus = " ".join(quote.quote for quote in quotes)
+        logger.debug("Building text model.")
+        text_model = MarkovPOSText(corpus)
+        logger.debug("Compiling text model.")
+        text_model.compile(inplace=True)
+        logger.debug("Saving model as JSON.")
+        self.data = text_model.to_json()
+        self.save()
+        logger.debug("Markov model populated to database.")
+
     def __str__(self):  # pragma: nocover
         return self.character.name
 
@@ -273,7 +351,10 @@ class QuoteStats(TimeStampedModel):
     """
 
     quote = models.OneToOneField(
-        Quote, on_delete=models.CASCADE, help_text=_("The Quote the stats related to.")
+        Quote,
+        on_delete=models.CASCADE,
+        related_name="stats",
+        help_text=_("The Quote the stats related to."),
     )
     times_used = models.PositiveIntegerField(
         default=0, help_text=_("Times used for random quotes, etc.")
