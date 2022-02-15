@@ -6,6 +6,6 @@
   <p><strong>{% trans "Are you sure you want to delete character:" %}</strong> {{ object.name }}</p>
   <form method="post">
   {% csrf_token %}
-  <button type="submit" class="btn btn-danger">{% trans "Delete" %}</button> <a href="{% url 'quotes:character_detail' slug=object.slug %}" class="btn btn-secondary">{% trans "Go back to character details" %}</a>
+  <button type="submit" class="btn btn-danger">{% trans "Delete" %}</button> <a href="{% url 'quotes:character_detail' character=object.slug %}" class="btn btn-secondary">{% trans "Go back to character details" %}</a>
   </form>
 {% endblock %}

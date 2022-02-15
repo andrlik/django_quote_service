@@ -6,6 +6,6 @@
   <p>{% blocktranslate %}Add a character to {{ group.name }} using the form below.{% endblocktranslate %}</p>
   <form method="post">{% csrf_token %}
   {{ form|crispy }}
-  <button type="submit" class="btn btn-success">{% translate "Add character" %}</button> <a href="{% url 'quotes:character_list' group=group.id %}" class="btn btn-secondary">{% translate "Back to character list" %}</a>
+  <button type="submit" class="btn btn-success">{% translate "Add character" %}</button> <a href="{% url 'quotes:character_list' group=group.slug %}" class="btn btn-secondary">{% translate "Back to character list" %}</a>
   </form>
 {% endblock %}

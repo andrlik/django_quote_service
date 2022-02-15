@@ -5,7 +5,7 @@
 <h1>{% blocktranslate %}Characters in {{ group.name }}{% endblocktranslate %}</h1>
   <ul>
   {% for character in page_obj %}
-  <li><a href="{% url 'quotes:character_detail' slug=character.slug %}">{{ character.name }}</a>: <a href="{% url 'quotes:quote_list' character=character.slug %}" class="btn btn-outline-info">{{ character.quote_set.count }} {% translate "quotes" %}</a></li>
+  <li><a href="{% url 'quotes:character_detail' character=character.slug %}">{{ character.name }}</a>: <a href="{% url 'quotes:quote_list' character=character.slug %}" class="btn btn-outline-info">{{ character.quote_set.count }} {% translate "quotes" %}</a></li>
   {% empty %}
   <li>{% translate "No characters found!" %}</li>
   {% endfor %}

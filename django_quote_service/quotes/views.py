@@ -46,7 +46,7 @@ class CharacterGroupDetailView(
     context_object_name = "group"
     template_name = "quotes/character_group_detail.html"
     permission_required = "quotes.read_charactergroup"
-    pk_url_kwarg = "id"
+    slug_url_kwarg = "group"
 
 
 class CharacterGroupUpdateView(
@@ -61,13 +61,13 @@ class CharacterGroupUpdateView(
     template_name = "quotes/character_group_update.html"
     permission_required = "quotes.edit_charactergroup"
     fields = ["name", "description", "public"]
-    pk_url_kwarg = "id"
+    slug_url_kwarg = "group"
 
     def get_success_url(self):
         messages.success(
             self.request, _(f"Successfully updated group {self.object.name}!")
         )
-        return reverse_lazy("quotes:group_detail", kwargs={"id": self.object.id})
+        return reverse_lazy("quotes:group_detail", kwargs={"group": self.object.slug})
 
 
 class CharacterGroupDeleteView(
@@ -81,7 +81,7 @@ class CharacterGroupDeleteView(
     context_object_name = "group"
     template_name = "quotes/character_group_delete.html"
     permission_required = "quotes.delete_charactergroup"
-    pk_url_kwarg = "id"
+    slug_url_kwarg = "group"
     success_url = reverse_lazy("quotes:group_list")
 
 
@@ -99,7 +99,7 @@ class CharacterGroupCreateView(LoginRequiredMixin, GenericCreate):
         obj = form.save()
         messages.success(self.request, _(f"Successfully created group {obj.name}"))
         return HttpResponseRedirect(
-            redirect_to=reverse_lazy("quotes:group_detail", kwargs={"id": obj.id})
+            redirect_to=reverse_lazy("quotes:group_detail", kwargs={"group": obj.slug})
         )
 
 
@@ -117,8 +117,8 @@ class CharacterCreateView(LoginRequiredMixin, PermissionRequiredMixin, GenericCr
     permission_required = "quotes.edit_charactergroup"
 
     def dispatch(self, request, *args, **kwargs):
-        group_pk = kwargs.pop("group")
-        self.group = get_object_or_404(CharacterGroup, id=group_pk)
+        group_slug = kwargs.pop("group")
+        self.group = get_object_or_404(CharacterGroup, slug=group_slug)
         return super().dispatch(request, *args, **kwargs)
 
     def get_permission_object(self):
@@ -136,7 +136,7 @@ class CharacterCreateView(LoginRequiredMixin, PermissionRequiredMixin, GenericCr
         messages.success(self.request, _(f"Successfully created character {obj.name}!"))
         return HttpResponseRedirect(
             redirect_to=reverse_lazy(
-                "quotes:character_detail", kwargs={"slug": obj.slug}
+                "quotes:character_detail", kwargs={"character": obj.slug}
             )
         )
 
@@ -147,7 +147,7 @@ class CharacterDetailView(LoginRequiredMixin, PermissionRequiredMixin, GenericDe
     """
 
     model = Character
-    slug_url_kwarg = "slug"
+    slug_url_kwarg = "character"
     slug_field = "slug"
     template_name = "quotes/character_detail.html"
     context_object_name = "character"
@@ -161,7 +161,7 @@ class CharacterUpdateView(LoginRequiredMixin, PermissionRequiredMixin, GenericUp
     """
 
     model = Character
-    slug_url_kwarg = "slug"
+    slug_url_kwarg = "character"
     slug_field = "slug"
     template_name = "quotes/character_update.html"
     permission_required = "quotes.edit_character"
@@ -170,7 +170,7 @@ class CharacterUpdateView(LoginRequiredMixin, PermissionRequiredMixin, GenericUp
     def get_success_url(self):
         messages.success(self.request, "Successfully updated character!")
         return reverse_lazy(
-            "quotes:character_detail", kwargs={"slug": self.kwargs["slug"]}
+            "quotes:character_detail", kwargs={"character": self.kwargs["character"]}
         )
 
 
@@ -181,15 +181,20 @@ class CharacterDeleteView(LoginRequiredMixin, PermissionRequiredMixin, GenericDe
 
     model = Character
     slug_field = "slug"
-    slug_url_kwarg = "slug"
+    slug_url_kwarg = "character"
     template_name = "quotes/character_delete.html"
     permission_required = "quotes.delete_character"
     context_object_name = "character"
+    group = None
+
+    def dispatch(self, request, *args, **kwargs):
+        character_slug = kwargs.get("character")
+        character = get_object_or_404(Character, slug=character_slug)
+        self.group = character.group
+        return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse_lazy(
-            "quotes:character_detail", kwargs={"slug": self.kwargs["slug"]}
-        )
+        return reverse_lazy("quotes:character_list", kwargs={"group": self.group.slug})
 
 
 class CharacterListView(LoginRequiredMixin, PermissionRequiredMixin, GenericList):
@@ -205,8 +210,8 @@ class CharacterListView(LoginRequiredMixin, PermissionRequiredMixin, GenericList
     allow_empty = True
 
     def dispatch(self, request, *args, **kwargs):
-        group_id = kwargs.pop("group")
-        self.group = get_object_or_404(CharacterGroup, id=group_id)
+        group_slug = kwargs.pop("group")
+        self.group = get_object_or_404(CharacterGroup, slug=group_slug)
         return super().dispatch(request, *args, **kwargs)
 
     def get_permission_object(self):
@@ -315,15 +320,13 @@ class QuoteUpdateView(LoginRequiredMixin, PermissionRequiredMixin, GenericUpdate
     permission_required = "quotes.edit_quote"
     template_name = "quotes/quote_update.html"
     fields = ["quote", "citation", "citation_url"]
-    pk_url_kwarg = "id"
+    pk_url_kwarg = "quote"
 
     def form_valid(self, form):
         obj = form.save()
         messages.success(self.request, _("Successfully updated quote!"))
         return HttpResponseRedirect(
-            redirect_to=reverse_lazy(
-                "quotes:quote_list", kwargs={"character": obj.character.slug}
-            )
+            redirect_to=reverse_lazy("quotes:quote_detail", kwargs={"quote": obj.id})
         )
 
 
@@ -333,7 +336,7 @@ class QuoteDetailView(LoginRequiredMixin, PermissionRequiredMixin, GenericDetail
     """
 
     model = Quote
-    pk_url_kwarg = "id"
+    pk_url_kwarg = "quote"
     context_object_name = "quote"
     permission_required = "quotes.read_quote"
     template_name = "quotes/quote_detail.html"
@@ -346,7 +349,7 @@ class QuoteDeleteView(LoginRequiredMixin, PermissionRequiredMixin, GenericDelete
     """
 
     model = Quote
-    pk_url_kwarg = "id"
+    pk_url_kwarg = "quote"
     context_object_name = "quote"
     permission_required = "quotes.delete_quote"
     template_name = "quotes/quote_delete.html"

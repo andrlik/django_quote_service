@@ -81,7 +81,7 @@ def test_group_create(client, django_assert_max_num_queries, user):
 )
 def test_groups_single_object_view_requires_login(client, c_groups_user, view_name):
     group = CharacterGroup.objects.filter(owner=c_groups_user)[0]
-    url = reverse(view_name, kwargs={"id": group.id})
+    url = reverse(view_name, kwargs={"group": group.slug})
     response = client.get(url)
     assert response.status_code == 302
     assert "/accounts/login/" in response["Location"]
@@ -91,7 +91,7 @@ def test_group_detail_view_for_owner(
     client, django_assert_max_num_queries, c_groups_user
 ):
     group = CharacterGroup.objects.filter(owner=c_groups_user)[0]
-    url = reverse("quotes:group_detail", kwargs={"id": group.id})
+    url = reverse("quotes:group_detail", kwargs={"group": group.slug})
     client.force_login(c_groups_user)
     with django_assert_max_num_queries(50):
         response = client.get(url)
@@ -102,7 +102,7 @@ def test_group_detail_for_other_user(
     client, django_assert_max_num_queries, c_groups_user
 ):
     group = CharacterGroup.objects.filter(owner=c_groups_user)[0]
-    url = reverse("quotes:group_detail", kwargs={"id": group.id})
+    url = reverse("quotes:group_detail", kwargs={"group": group.slug})
     client.force_login(UserFactory())
     with django_assert_max_num_queries(50):
         response = client.get(url)
@@ -113,7 +113,7 @@ def test_group_update_access_restricted_to_owner(
     client, django_assert_max_num_queries, c_groups_user
 ):
     group = CharacterGroup.objects.filter(owner=c_groups_user)[0]
-    url = reverse("quotes:group_update", kwargs={"id": group.id})
+    url = reverse("quotes:group_update", kwargs={"group": group.slug})
     client.force_login(UserFactory())
     with django_assert_max_num_queries(50):
         response = client.get(url)
@@ -129,7 +129,7 @@ def test_group_update_access_restricted_to_owner(
 
 def test_group_update_by_owner(client, django_assert_max_num_queries, c_groups_user):
     group = CharacterGroup.objects.filter(owner=c_groups_user)[0]
-    url = reverse("quotes:group_update", kwargs={"id": group.id})
+    url = reverse("quotes:group_update", kwargs={"group": group.slug})
     client.force_login(c_groups_user)
     with django_assert_max_num_queries(50):
         response = client.get(url)
@@ -148,7 +148,7 @@ def test_group_delete_not_accessible_by_non_owner(
 ):
     group = CharacterGroup.objects.filter(owner=c_groups_user)[0]
     group_num = CharacterGroup.objects.filter(owner=c_groups_user).count()
-    url = reverse("quotes:group_delete", kwargs={"id": group.id})
+    url = reverse("quotes:group_delete", kwargs={"group": group.slug})
     client.force_login(UserFactory())
     with django_assert_max_num_queries(50):
         response = client.get(url)
@@ -162,7 +162,7 @@ def test_group_delete_not_accessible_by_non_owner(
 def test_group_delete(client, django_assert_max_num_queries, c_groups_user):
     group = CharacterGroup.objects.filter(owner=c_groups_user)[0]
     group_num = CharacterGroup.objects.filter(owner=c_groups_user).count()
-    url = reverse("quotes:group_delete", kwargs={"id": group.id})
+    url = reverse("quotes:group_delete", kwargs={"group": group.slug})
     client.force_login(c_groups_user)
     with django_assert_max_num_queries(50):
         response = client.get(url)
@@ -181,7 +181,7 @@ def test_group_delete(client, django_assert_max_num_queries, c_groups_user):
 )
 def test_character_list_requires_login(client, c_groups_user, view_name):
     group = CharacterGroup.objects.get(name="Group1")
-    url = reverse(view_name, kwargs={"group": group.id})
+    url = reverse(view_name, kwargs={"group": group.slug})
     response = client.get(url)
     assert response.status_code == 302
     assert "/accounts/login/" in response["Location"]
@@ -194,7 +194,7 @@ def test_unauthorized_character_list_access(
     client, django_assert_max_num_queries, c_groups_user, view_name
 ):
     group = CharacterGroup.objects.get(name="Group1")
-    url = reverse(view_name, kwargs={"group": group.id})
+    url = reverse(view_name, kwargs={"group": group.slug})
     client.force_login(UserFactory())
     with django_assert_max_num_queries(50):
         response = client.get(url)
@@ -205,7 +205,7 @@ def test_authorized_character_list_access(
     client, django_assert_max_num_queries, c_groups_user
 ):
     group = CharacterGroup.objects.get(name="Group1")
-    url = reverse("quotes:character_list", kwargs={"group": group.id})
+    url = reverse("quotes:character_list", kwargs={"group": group.slug})
     client.force_login(c_groups_user)
     with django_assert_max_num_queries(50):
         response = client.get(url)
@@ -218,7 +218,7 @@ def test_unauthorized_character_create(
 ):
     group = CharacterGroup.objects.get(name="Group1")
     character_number = Character.objects.filter(group=group).count()
-    url = reverse("quotes:character_create", kwargs={"group": group.id})
+    url = reverse("quotes:character_create", kwargs={"group": group.slug})
     client.force_login(UserFactory())
     with django_assert_max_num_queries(50):
         response = client.post(url, data={"name": "John Snow"})
@@ -231,7 +231,7 @@ def test_authorized_character_create(
 ):
     group = CharacterGroup.objects.get(name="Group1")
     character_number = Character.objects.filter(group=group).count()
-    url = reverse("quotes:character_create", kwargs={"group": group.id})
+    url = reverse("quotes:character_create", kwargs={"group": group.slug})
     client.force_login(c_groups_user)
     with django_assert_max_num_queries(50):
         response = client.get(url)
@@ -247,7 +247,7 @@ def test_authorized_character_create(
     ["quotes:character_detail", "quotes:character_update", "quotes:character_delete"],
 )
 def test_get_views_for_character_require_login(client, c_groups_user, view_name):
-    url = reverse(view_name, kwargs={"slug": "group1-johnny-boy"})
+    url = reverse(view_name, kwargs={"character": "group1-johnny-boy"})
     response = client.get(url)
     assert response.status_code == 302
     assert "/accounts/login/" in response["Location"]
@@ -260,7 +260,7 @@ def test_get_views_for_character_require_login(client, c_groups_user, view_name)
 def test_get_views_for_character_unauthorized(
     client, django_assert_max_num_queries, c_groups_user, view_name
 ):
-    url = reverse(view_name, kwargs={"slug": "group1-johnny-boy"})
+    url = reverse(view_name, kwargs={"character": "group1-johnny-boy"})
     client.force_login(UserFactory())
     with django_assert_max_num_queries(50):
         response = client.get(url)
@@ -274,7 +274,7 @@ def test_get_views_for_character_unauthorized(
 def test_get_views_character_authorized(
     client, django_assert_max_num_queries, c_groups_user, view_name
 ):
-    url = reverse(view_name, kwargs={"slug": "group1-johnny-boy"})
+    url = reverse(view_name, kwargs={"character": "group1-johnny-boy"})
     client.force_login(c_groups_user)
     with django_assert_max_num_queries(50):
         response = client.get(url)
@@ -284,7 +284,7 @@ def test_get_views_character_authorized(
 def test_edit_character_view_unauthorized(
     client, django_assert_max_num_queries, c_groups_user
 ):
-    url = reverse("quotes:character_update", kwargs={"slug": "group1-johnny-boy"})
+    url = reverse("quotes:character_update", kwargs={"character": "group1-johnny-boy"})
     client.force_login(UserFactory())
     with django_assert_max_num_queries(50):
         response = client.post(
@@ -297,7 +297,7 @@ def test_edit_character_view_unauthorized(
 def test_delete_character_unauthorized(
     client, django_assert_max_num_queries, c_groups_user
 ):
-    url = reverse("quotes:character_delete", kwargs={"slug": "group1-johnny-boy"})
+    url = reverse("quotes:character_delete", kwargs={"character": "group1-johnny-boy"})
     client.force_login(UserFactory())
     with django_assert_max_num_queries(50):
         response = client.post(url, data={})
@@ -308,7 +308,7 @@ def test_delete_character_unauthorized(
 def test_authorized_character_edit(
     client, django_assert_max_num_queries, c_groups_user
 ):
-    url = reverse("quotes:character_update", kwargs={"slug": "group1-johnny-boy"})
+    url = reverse("quotes:character_update", kwargs={"character": "group1-johnny-boy"})
     client.force_login(c_groups_user)
     with django_assert_max_num_queries(50):
         response = client.post(
@@ -324,7 +324,7 @@ def test_authorized_character_edit(
 def test_authorized_character_delete(
     client, django_assert_max_num_queries, c_groups_user
 ):
-    url = reverse("quotes:character_delete", kwargs={"slug": "group1-johnny-boy"})
+    url = reverse("quotes:character_delete", kwargs={"character": "group1-johnny-boy"})
     client.force_login(c_groups_user)
     with django_assert_max_num_queries(50):
         response = client.post(url, data={})
@@ -400,7 +400,7 @@ def test_get_views_quote_detail_require_login(client, c_groups_user, view_name):
     quote = Quote.objects.select_related("character").filter(
         character__slug="group1-johnny-boy"
     )[0]
-    url = reverse(view_name, kwargs={"id": quote.id})
+    url = reverse(view_name, kwargs={"quote": quote.id})
     response = client.get(url)
     assert response.status_code == 302
     assert "/accounts/login/" in response["Location"]
@@ -415,7 +415,7 @@ def test_get_views_quote_detail_unauthorized(
     quote = Quote.objects.select_related("character").filter(
         character__slug="group1-johnny-boy"
     )[0]
-    url = reverse(view_name, kwargs={"id": quote.id})
+    url = reverse(view_name, kwargs={"quote": quote.id})
     client.force_login(UserFactory())
     with django_assert_max_num_queries(50):
         response = client.get(url)
@@ -431,7 +431,7 @@ def test_get_views_quote_detail_authorized(
     quote = Quote.objects.select_related("character").filter(
         character__slug="group1-johnny-boy"
     )[0]
-    url = reverse(view_name, kwargs={"id": quote.id})
+    url = reverse(view_name, kwargs={"quote": quote.id})
     client.force_login(c_groups_user)
     with django_assert_max_num_queries(50):
         response = client.get(url)
@@ -442,7 +442,7 @@ def test_quote_edit_unauthorized(client, django_assert_max_num_queries, c_groups
     quote = Quote.objects.select_related("character").filter(
         character__slug="group1-johnny-boy"
     )[0]
-    url = reverse("quotes:quote_update", kwargs={"id": quote.id})
+    url = reverse("quotes:quote_update", kwargs={"quote": quote.id})
     client.force_login(UserFactory())
     with django_assert_max_num_queries(50):
         response = client.post(url, data={"quote": "I ate too much pie"})
@@ -455,7 +455,7 @@ def test_quote_edit_authorized(client, django_assert_max_num_queries, c_groups_u
     quote = Quote.objects.select_related("character").filter(
         character__slug="group1-johnny-boy"
     )[0]
-    url = reverse("quotes:quote_update", kwargs={"id": quote.id})
+    url = reverse("quotes:quote_update", kwargs={"quote": quote.id})
     client.force_login(c_groups_user)
     with django_assert_max_num_queries(50):
         response = client.post(url, data={"quote": "I ate too much pie"})
@@ -470,7 +470,7 @@ def test_quote_delete_unauthorized(
     quote = Quote.objects.select_related("character").filter(
         character__slug="group1-johnny-boy"
     )[0]
-    url = reverse("quotes:quote_delete", kwargs={"id": quote.id})
+    url = reverse("quotes:quote_delete", kwargs={"quote": quote.id})
     client.force_login(UserFactory())
     with django_assert_max_num_queries(50):
         response = client.post(url, data={})
@@ -482,7 +482,7 @@ def test_quote_delete_authorized(client, django_assert_max_num_queries, c_groups
     quote = Quote.objects.select_related("character").filter(
         character__slug="group1-johnny-boy"
     )[0]
-    url = reverse("quotes:quote_delete", kwargs={"id": quote.id})
+    url = reverse("quotes:quote_delete", kwargs={"quote": quote.id})
     client.force_login(c_groups_user)
     with django_assert_max_num_queries(50):
         response = client.post(url, data={})

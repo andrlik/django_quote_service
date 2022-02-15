@@ -6,7 +6,7 @@
   <p><a class="btn btn-primary" href="{% url 'quotes:group_create' %}">{% trans "Create new group" %}</a></p>
 <ul>
   {% for group in page_obj %}
-  <li><a href="{% url 'quotes:group_detail' group.id %}">{{ group.name }}</a></li>
+  <li><a href="{% url 'quotes:group_detail' group=group.slug %}">{{ group.name }}</a></li>
   {% empty %}
   <li>{%  trans "No groups found!" %}</li>
   {% endfor%}

@@ -25,40 +25,42 @@ urlpatterns = [
         "groups/create/", view=CharacterGroupCreateView.as_view(), name="group_create"
     ),
     path(
-        "groups/<int:id>/", view=CharacterGroupDetailView.as_view(), name="group_detail"
+        "groups/<slug:group>/",
+        view=CharacterGroupDetailView.as_view(),
+        name="group_detail",
     ),
     path(
-        "groups/<int:id>/edit/",
+        "groups/<slug:group>/edit/",
         view=CharacterGroupUpdateView.as_view(),
         name="group_update",
     ),
     path(
-        "groups/<int:id>/delete/",
+        "groups/<slug:group>/delete/",
         view=CharacterGroupDeleteView.as_view(),
         name="group_delete",
     ),
     path(
-        "groups/<int:group>/characters/",
+        "groups/<slug:group>/characters/",
         view=CharacterListView.as_view(),
         name="character_list",
     ),
     path(
-        "groups/<int:group>/characters/add/",
+        "groups/<slug:group>/characters/add/",
         view=CharacterCreateView.as_view(),
         name="character_create",
     ),
     path(
-        "characters/<slug:slug>/",
+        "characters/<slug:character>/",
         view=CharacterDetailView.as_view(),
         name="character_detail",
     ),
     path(
-        "characters/<slug:slug>/edit/",
+        "characters/<slug:character>/edit/",
         view=CharacterUpdateView.as_view(),
         name="character_update",
     ),
     path(
-        "characters/<slug:slug>/delete/",
+        "characters/<slug:character>/delete/",
         view=CharacterDeleteView.as_view(),
         name="character_delete",
     ),
@@ -72,9 +74,13 @@ urlpatterns = [
         view=QuoteCreateView.as_view(),
         name="quote_create",
     ),
-    path("quotes/<int:id>/", view=QuoteDetailView.as_view(), name="quote_detail"),
-    path("quotes/<int:id>/edit/", view=QuoteUpdateView.as_view(), name="quote_update"),
+    path("quotes/<int:quote>/", view=QuoteDetailView.as_view(), name="quote_detail"),
     path(
-        "quotes/<int:id>/delete/", view=QuoteDeleteView.as_view(), name="quote_delete"
+        "quotes/<int:quote>/edit/", view=QuoteUpdateView.as_view(), name="quote_update"
+    ),
+    path(
+        "quotes/<int:quote>/delete/",
+        view=QuoteDeleteView.as_view(),
+        name="quote_delete",
     ),
 ]
