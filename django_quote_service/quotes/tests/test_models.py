@@ -1,8 +1,8 @@
 import pytest
 from django.db import IntegrityError
 
-from ..models import Character, CharacterGroup, Quote
 from ...users.models import User
+from ..models import Character, CharacterGroup, Quote
 
 pytestmark = pytest.mark.django_db(transaction=True)
 

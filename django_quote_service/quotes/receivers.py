@@ -13,7 +13,7 @@ from .models import (
     Quote,
     QuoteStats,
 )
-from .signals import quote_random_retrieved, markov_sentence_generated
+from .signals import markov_sentence_generated, quote_random_retrieved
 
 
 @receiver(pre_save, sender=CharacterGroup)
