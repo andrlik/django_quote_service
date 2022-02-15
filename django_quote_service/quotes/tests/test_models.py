@@ -1,8 +1,8 @@
 import pytest
 from django.db import IntegrityError
 
-from ...users.models import User
 from ..models import Character, CharacterGroup, Quote
+from ...users.models import User
 
 pytestmark = pytest.mark.django_db(transaction=True)
 
@@ -62,14 +62,7 @@ def test_reject_character_duplicate_slug(
 
 
 @pytest.fixture
-def property_group(user):
-    random_quotes = [
-        "I hate Mondays.",
-        "I love lasagna.",
-        "This tastes like a dying medium.",
-        "I feed my babies blood.",
-        "The dark side has more cookies.",
-    ]
+def property_group(user, corpus_sentences):
     cg = CharacterGroup.objects.create(name="Wranglin Robots", owner=user)
     for x in range(10):
         allow_markov = False
@@ -78,7 +71,7 @@ def property_group(user):
         c = Character.objects.create(
             name=str(x), group=cg, allow_markov=allow_markov, owner=user
         )
-        for quote in random_quotes:
+        for quote in corpus_sentences:
             Quote.objects.create(quote=quote, character=c, owner=user)
     yield cg
     cg.delete()
@@ -114,7 +107,6 @@ def test_retrieve_random_quote(property_group):
     assert type(quoteable_character.get_random_quote()) == Quote
 
 
-@pytest.mark.xfail  # Needs a much bigger corpus.
 def test_generate_markov_sentence(property_group):
     noquote_character = Character.objects.create(
         group=property_group, name="No One", owner=property_group.owner

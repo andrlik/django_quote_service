@@ -180,7 +180,7 @@ class Character(
         Conducts sanity checks to see if requesting a markov chain is feasible.
         :return: bool
         """
-        if self.allow_markov and Quote.objects.filter(character=self).count() > 1:
+        if self.allow_markov and Quote.objects.filter(character=self).count() > 10:
             return True
         return False
 
@@ -316,9 +316,9 @@ class CharacterMarkovModel(TimeStampedModel):
         logger.debug("Generating text model. Fetching quotes.")
         quotes = Quote.objects.filter(character=self.character)
         # Don't bother generating model if there isn't data.
-        if not quotes.exists():
+        if not quotes.exists():  # pragma: nocover
             logger.debug("There are no quotes. Returning None.")
-            return  # pragma: nocover
+            return
         logger.debug("Quotes retrieved! Forming into corpus.")
         corpus = " ".join(quote.quote for quote in quotes)
         logger.debug("Building text model.")
