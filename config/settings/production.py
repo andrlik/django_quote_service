@@ -146,6 +146,7 @@ COMPRESS_FILTERS = {
     ],
     "js": ["compressor.filters.jsmin.JSMinFilter"],
 }
+COMPRESS_PRECOMPILERS = (("text/x-scss", "sass --scss {infile} {outfile}"),)
 
 # LOGGING
 # ------------------------------------------------------------------------------
