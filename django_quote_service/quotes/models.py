@@ -1,11 +1,12 @@
 import random
-from typing import Optional, Any
+from typing import Any, Optional
 
 import rules
 from django.conf import settings
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
+from loguru import logger
 from model_utils.models import TimeStampedModel
 from rules.contrib.models import RulesModelBase, RulesModelMixin
 from slugify import slugify
@@ -189,11 +190,15 @@ class Character(
         :param max_characters: Optional maximum limit of characters in the return set. Default: 280
         :return: str or None
         """
+        logger.debug("Checking to see if character is markov ready...")
         if self.markov_ready:
+            logger.debug("It IS ready. Fetching markov model.")
             markov_model = CharacterMarkovModel.objects.get(character=self)
             if not markov_model.data:
+                logger.debug("No model defined yet, generating...")
                 markov_model.generate_model_from_corpus()
             text_model = MarkovPOSText.from_json(markov_model.data)
+            logger.debug("Markov text model loaded. Generating sentence.")
             return text_model.make_short_sentence(max_chars=max_characters)
         return None
 
@@ -308,15 +313,22 @@ class CharacterMarkovModel(TimeStampedModel):
         Collect all quotes attributed to the related character. Then
         create, compile, and save the model.
         """
+        logger.debug("Generating text model. Fetching quotes.")
         quotes = Quote.objects.filter(character=self.character)
         # Don't bother generating model if there isn't data.
         if not quotes.exists():
+            logger.debug("There are no quotes. Returning None.")
             return  # pragma: nocover
+        logger.debug("Quotes retrieved! Forming into corpus.")
         corpus = " ".join(quote.quote for quote in quotes)
+        logger.debug("Building text model.")
         text_model = MarkovPOSText(corpus)
+        logger.debug("Compiling text model.")
         text_model.compile(inplace=True)
+        logger.debug("Saving model as JSON.")
         self.data = text_model.to_json()
         self.save()
+        logger.debug("Markov model populated to database.")
 
     def __str__(self):  # pragma: nocover
         return self.character.name

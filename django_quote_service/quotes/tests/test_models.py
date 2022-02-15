@@ -2,7 +2,7 @@ import pytest
 from django.db import IntegrityError
 
 from ...users.models import User
-from ..models import Character, CharacterGroup
+from ..models import Character, CharacterGroup, Quote
 
 pytestmark = pytest.mark.django_db(transaction=True)
 
@@ -63,14 +63,23 @@ def test_reject_character_duplicate_slug(
 
 @pytest.fixture
 def property_group(user):
+    random_quotes = [
+        "I hate Mondays.",
+        "I love lasagna.",
+        "This tastes like a dying medium.",
+        "I feed my babies blood.",
+        "The dark side has more cookies.",
+    ]
     cg = CharacterGroup.objects.create(name="Wranglin Robots", owner=user)
     for x in range(10):
         allow_markov = False
         if x % 2 == 0:
             allow_markov = True
-        Character.objects.create(
+        c = Character.objects.create(
             name=str(x), group=cg, allow_markov=allow_markov, owner=user
         )
+        for quote in random_quotes:
+            Quote.objects.create(quote=quote, character=c, owner=user)
     yield cg
     cg.delete()
 
@@ -93,3 +102,26 @@ def test_refresh_from_db_also_updates_cached_properties(
     property_group.refresh_from_db()
     assert property_group.total_characters == 11
     assert property_group.markov_characters == 6
+
+
+def test_retrieve_random_quote(property_group):
+    noquote_character = Character.objects.create(
+        group=property_group, name="No One", owner=property_group.owner
+    )
+    assert noquote_character.get_random_quote() is None
+    noquote_character.delete()
+    quoteable_character = Character.objects.filter(group=property_group)[0]
+    assert type(quoteable_character.get_random_quote()) == Quote
+
+
+@pytest.mark.xfail  # Needs a much bigger corpus.
+def test_generate_markov_sentence(property_group):
+    noquote_character = Character.objects.create(
+        group=property_group, name="No One", owner=property_group.owner
+    )
+    assert noquote_character.get_markov_sentence() is None
+    noquote_character.delete()
+    quotable_character = Character.objects.filter(group=property_group)[0]
+    sentence = quotable_character.get_markov_sentence()
+    print(sentence)
+    assert isinstance(sentence, str)

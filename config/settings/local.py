@@ -1,3 +1,5 @@
+from dj_easy_log import load_loguru
+
 from .base import *  # noqa
 from .base import env
 
@@ -92,3 +94,6 @@ LOGGING = {
         },
     },
 }
+
+
+load_loguru(globals())

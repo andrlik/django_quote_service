@@ -2,6 +2,8 @@
 With these settings, tests run faster.
 """
 
+from dj_easy_log import load_loguru
+
 from .base import *  # noqa
 from .base import env
 
@@ -27,3 +29,6 @@ EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+
+load_loguru(globals())
