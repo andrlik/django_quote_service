@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block extratitle %}{% blocktranslate %}Characters in {{ group.name }} - {% endblocktranslate %}{% endblock %}
+{% block extratitle %}{% blocktranslate %}Characters in {{ character.group.name }} - {% endblocktranslate %}{% endblock %}
 {% block content %}
-<h1>{% blocktranslate %}Characters in {{ group.name }}{% endblocktranslate %}</h1>
+<h1>{% blocktranslate %}Characters in {{ character.group.name }}{% endblocktranslate %}</h1>
   <ul>
   {% for character in page_obj %}
   <li><a href="{% url 'quotes:character_detail' character=character.slug %}">{{ character.name }}</a>: <a href="{% url 'quotes:quote_list' character=character.slug %}" class="btn btn-outline-info">{{ character.quote_set.count }} {% translate "quotes" %}</a></li>
