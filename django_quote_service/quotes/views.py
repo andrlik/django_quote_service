@@ -13,7 +13,6 @@ from rules.contrib.views import PermissionRequiredMixin
 
 from .models import Character, CharacterGroup, Quote
 
-
 # Create your views here.
 
 
@@ -48,6 +47,12 @@ class CharacterGroupDetailView(
     template_name = "quotes/character_group_detail.html"
     permission_required = "quotes.read_charactergroup"
     slug_url_kwarg = "group"
+    prefetch_related = ["character_set"]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["char_sample"] = Character.objects.filter(group=context["group"])[:5]
+        return context
 
 
 class CharacterGroupUpdateView(
@@ -155,6 +160,11 @@ class CharacterDetailView(LoginRequiredMixin, PermissionRequiredMixin, GenericDe
     context_object_name = "character"
     permission_required = "quotes.read_character"
     prefetch_related = "quote_set"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["samp_quotes"] = context["character"].quote_set.all()[:5]
+        return context
 
 
 class CharacterUpdateView(LoginRequiredMixin, PermissionRequiredMixin, GenericUpdate):

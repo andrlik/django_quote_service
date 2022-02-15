@@ -2,8 +2,37 @@
 {% load i18n %}
 {% block extratitle %}{{ group.name }} - {% endblock %}
 {% block content %}
+    <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'quotes:group_list' %}">{% translate "Groups" %}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ group.name }}</li>
+  </ol>
+  </nav>
 <h1>{{ group.name }}</h1>
 {{ group.description_rendered|safe }}
+  <p class="small">{% translate "Created at" %} {{ group.created }} {% translate "Last modified" %} {{ group.modified }}</p>
   <a href="{% url 'quotes:group_update' group=group.slug %}" class="btn btn-primary">{% trans "Edit group" %}</a> <a href="{% url 'quotes:group_list' %}" class="btn btn-secondary">{% trans "Back to list" %}</a>
-  <p><a href="{% url 'quotes:group_delete' group=group.slug %}" class="btn btn-danger">{% trans "Delete group" %}</a></p>
+  <table class="table table-striped caption-top">
+  <caption>{% translate "Showing" %} {{ char_sample.count }} {% translate "of" %} {{ group.character_set.count }} {% translate "characters." %}
+  <a href="{% url 'quotes:character_list' group=group.slug %}">{% translate "See all." %}</a></caption>
+  <thead>
+  <tr>
+    <th scope="col">{% trans "Character" %}</th>
+    <th scope="col" class="text-end">{% trans "# Quotes" %}</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for char in char_sample %}
+  <tr>
+    <th scope="row"><a href="{% url 'quotes:character_detail' character=char.slug %}">{{ char.name }}</a></th>
+    <td class="text-end"><a href="{% url 'quotes:quote_list' character=char.slug %}">{{ char.quote_set.count }}</a></td>
+  </tr>
+  {% empty %}
+  {% endfor %}
+  </tbody>
+  </table>
+
+  <p><a href="{% url 'quotes:character_create' group=group.slug %}" class="btn btn-success">{% translate "Add new character" %}</a></p>
+
+  <p class="text-end"><a href="{% url 'quotes:group_delete' group=group.slug %}" class="btn btn-danger">{% trans "Delete group" %}</a></p>
 {% endblock %}
