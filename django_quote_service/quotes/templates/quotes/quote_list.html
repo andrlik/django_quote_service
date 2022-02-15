@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block extratitle %}{% blocktranslate %}Quotes from {{ character.name }}{% endblocktranslate %} - {% endblock %}
+{% block extratitle %}{% blocktranslate %}Quotes from{% endblocktranslate %} {{ character.name }} - {% endblock %}
 {% block content %}
-<h1>{% blocktranslate %}Quotes from {{ character.name }}{% endblocktranslate %}</h1>
+<h1>{% blocktranslate %}Quotes from {% endblocktranslate %} {{ character.name }}</h1>
 
 <p><a href="{% url 'quotes:quote_create' character=character.slug %}" class="btn btn-success">{% translate "Add quote" %}</a></p>
 <table class="table">
@@ -17,7 +17,7 @@
   {% for quote in page_obj %}
   <tr>
     <th scope="row"><a href="{% url 'quotes:quote_detail' quote=quote.id %}">{{ quote.id }}</a></th>
-    <td>{{ quote.quote_rendered }}</td>
+    <td>{{ quote.quote_rendered|safe }}</td>
     <td><a href="{% url 'quotes:quote_update' quote=quote.id %}" class="btn btn-primary">{% translate "Edit" %}</a> <a href="{% url 'quotes:quote_delete' quote=quote.id %}" class="btn btn-danger">{% translate "Delete" %}</a></td>
   </tr>
   {% empty %}

@@ -13,6 +13,7 @@ from rules.contrib.views import PermissionRequiredMixin
 
 from .models import Character, CharacterGroup, Quote
 
+
 # Create your views here.
 
 
@@ -115,6 +116,7 @@ class CharacterCreateView(LoginRequiredMixin, PermissionRequiredMixin, GenericCr
     template_name = "quotes/character_create.html"
     fields = ["name", "description", "allow_markov", "public"]
     permission_required = "quotes.edit_charactergroup"
+    group = None
 
     def dispatch(self, request, *args, **kwargs):
         group_slug = kwargs.pop("group")
@@ -208,6 +210,7 @@ class CharacterListView(LoginRequiredMixin, PermissionRequiredMixin, GenericList
     context_object_name = "characters"
     paginate_by = 15
     allow_empty = True
+    group = None
 
     def dispatch(self, request, *args, **kwargs):
         group_slug = kwargs.pop("group")
@@ -245,6 +248,7 @@ class QuoteListView(LoginRequiredMixin, PermissionRequiredMixin, GenericList):
     permission_required = "quotes.read_character"
     paginate_by = 15
     allow_empty = True
+    character = None
 
     def dispatch(self, request, *args, **kwargs):
         character_slug = kwargs.pop("character")
@@ -276,6 +280,7 @@ class QuoteCreateView(LoginRequiredMixin, PermissionRequiredMixin, GenericCreate
     template_name = "quotes/quote_create.html"
     permission_required = "quotes.edit_character"
     fields = ["quote", "citation", "citation_url"]
+    character = None
 
     def dispatch(self, request, *args, **kwargs):
         character_slug = kwargs.pop("character")
