@@ -13,7 +13,6 @@ from rules.contrib.views import PermissionRequiredMixin
 
 from .models import Character, CharacterGroup, Quote
 
-
 # Create your views here.
 
 
