@@ -47,6 +47,12 @@ class CharacterGroupDetailView(
     template_name = "quotes/character_group_detail.html"
     permission_required = "quotes.read_charactergroup"
     slug_url_kwarg = "group"
+    prefetch_related = ["character_set"]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["char_sample"] = Character.objects.filter(group=context["group"])[:5]
+        return context
 
 
 class CharacterGroupUpdateView(
@@ -115,6 +121,7 @@ class CharacterCreateView(LoginRequiredMixin, PermissionRequiredMixin, GenericCr
     template_name = "quotes/character_create.html"
     fields = ["name", "description", "allow_markov", "public"]
     permission_required = "quotes.edit_charactergroup"
+    group = None
 
     def dispatch(self, request, *args, **kwargs):
         group_slug = kwargs.pop("group")
@@ -153,6 +160,11 @@ class CharacterDetailView(LoginRequiredMixin, PermissionRequiredMixin, GenericDe
     context_object_name = "character"
     permission_required = "quotes.read_character"
     prefetch_related = "quote_set"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["samp_quotes"] = context["character"].quote_set.all()[:5]
+        return context
 
 
 class CharacterUpdateView(LoginRequiredMixin, PermissionRequiredMixin, GenericUpdate):
@@ -208,6 +220,7 @@ class CharacterListView(LoginRequiredMixin, PermissionRequiredMixin, GenericList
     context_object_name = "characters"
     paginate_by = 15
     allow_empty = True
+    group = None
 
     def dispatch(self, request, *args, **kwargs):
         group_slug = kwargs.pop("group")
@@ -245,6 +258,7 @@ class QuoteListView(LoginRequiredMixin, PermissionRequiredMixin, GenericList):
     permission_required = "quotes.read_character"
     paginate_by = 15
     allow_empty = True
+    character = None
 
     def dispatch(self, request, *args, **kwargs):
         character_slug = kwargs.pop("character")
@@ -276,6 +290,7 @@ class QuoteCreateView(LoginRequiredMixin, PermissionRequiredMixin, GenericCreate
     template_name = "quotes/quote_create.html"
     permission_required = "quotes.edit_character"
     fields = ["quote", "citation", "citation_url"]
+    character = None
 
     def dispatch(self, request, *args, **kwargs):
         character_slug = kwargs.pop("character")

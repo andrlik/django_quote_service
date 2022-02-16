@@ -2,9 +2,9 @@
 {% load i18n %}
 {% block extratitle %}{% blocktranslate %}Delete quote{% endblocktranslate %} - {% endblock %}
 {% block content %}
-<h1>{% blocktranslate %}Add quote for {{ object.chracter.name }}{% endblocktranslate %}</h1>
+<h1>{% blocktranslate %}Delete this quote from{% endblocktranslate %} {{ object.character.name }}</h1>
   <p><strong>{% translate "Are you sure you want to delete this?" %}</strong></p>
-  <blockquote>{{ quote.quote_rendered }}</blockquote>
+  <blockquote>{{ quote.quote_rendered|safe }}</blockquote>
 <form method="post">{% csrf_token %}
 <button class="btn btn-danger" type="submit">{% translate "Delete quote" %}</button> <a href="{% url "quotes:quote_list" character=object.character.slug %}" class="btn btn-secondary">{% translate "Return to quote list" %}</a>
 </form>
