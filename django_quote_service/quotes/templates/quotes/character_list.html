@@ -15,6 +15,7 @@
 <thead>
 <tr>
   <th scope="col">{% translate "Name" %}</th>
+  <th scope="col">{% translate "Allows markov" %}</th>
   <th scope="col" class="text-right">{% translate "# Quotes" %}</th>
 </tr>
 </thead>
@@ -22,6 +23,7 @@
   {% for character in page_obj %}
     <tr>
     <th scope="row"><a href="{% url 'quotes:character_detail' character=character.slug %}">{{ character.name }}</a></th>
+      <td><span class="badge {% if character.allow_markov %}bg-success{% else %}bg-secondary{% endif %}">{% if character.allow_markov %}{% translate "Yes" %}{% else %}{% translate "No" %}{% endif %}</span></td>
       <td><a href="{% url 'quotes:quote_list' character=character.slug %}">{{ character.quote_set.count }}</a></td>
    </tr>
   {% empty %}

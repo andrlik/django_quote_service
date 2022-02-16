@@ -21,6 +21,7 @@
     <th scope="col">#</th>
     <th scope="col">{% translate "Quote" %}</th>
     <th scope="col">{% translate "Cite" %}</th>
+    <th scope="col" class="text-end">{% translate "# Times Used" %}</th>
     <th scope="col">{% translate "Tools" %}</th>
   </tr>
   </thead>
@@ -34,6 +35,7 @@
       {% if quote.citation_url %}<a href="{{ quote.citation_url }}" target="_blank">{% endif %}{% if quote.citation %}{{ quote.citation }}{% else %}{{ quote.citation_url }}{% endif %}{% if quote.citation_url %}</a>{% endif %}
       {% endif %}
     </td>
+  <td class="text-end">{{ quote.stats.times_used }}</td>
     <td><a href="{% url 'quotes:quote_update' quote=quote.id %}" class="btn btn-primary">{% translate "Edit" %}</a> <a href="{% url 'quotes:quote_delete' quote=quote.id %}" class="btn btn-danger">{% translate "Delete" %}</a></td>
   </tr>
   {% empty %}

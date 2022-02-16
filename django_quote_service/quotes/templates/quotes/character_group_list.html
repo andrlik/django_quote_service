@@ -14,7 +14,8 @@
 <tr>
   <th scope="col">{% translate "Group" %}</th>
   <th scope="col">{% translate "Summary" %}</th>
-  <th scope="col" class="text-right">{% translate "# Characters" %}</th>
+  <th scope="col" class="text-end">{% translate "# Characters" %}</th>
+  <th scope="col" class="text-end">{% translate "# Quotes" %}</th>
 </tr>
 </thead>
 <tbody>
@@ -22,7 +23,8 @@
   <tr>
     <th scope="row"><a href="{% url 'quotes:group_detail' group=group.slug %}">{{ group.name }}</a></th>
     <td>{{ group.description_rendered|truncatewords_html:10|safe }}</td>
-    <td class="text-right">{{ group.total_characters }}</td>
+    <td class="text-end">{{ group.total_characters }}</td>
+    <td class="text-end">{{ group.total_quotes }}</td>
   </tr>
   {% empty %}
   {% endfor%}

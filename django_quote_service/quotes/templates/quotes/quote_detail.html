@@ -13,10 +13,19 @@
   </ol>
   </nav>
 <h1>{% blocktranslate %}Quote from{% endblocktranslate %} {{ quote.character.name }}</h1>
-<figure><blockquote class="blockquote">{{ quote.quote_rendered|safe }}</blockquote>
+<div class="card">
+<h5 class="card-header">{% translate "Quote" %}</h5>
+<div class="card-body">
+  <figure><blockquote class="blockquote">{{ quote.quote_rendered|safe }}</blockquote>
   {% if quote.citation or quote.citation_url %}
-  <figcaption class="blockquote-footer"><cite title="{% if quote.citation %}{{ quote.citation }}{% else %}{{ quote.citation_url }}{% endif %}">{% if quote.citation_url %}<a href="{{ quote.citation_url }}">{% endif %}{% if quote.citation %}{{ quote.citation }} {% else %}{{ quote.citation_url }}{% endif %}{% if quote.citation_url %}</a>{% endif %}</cite></figcaption>{% endif %}
+  <figcaption class="blockquote-footer">{{ quote.character.name }}, <cite title="{% if quote.citation %}{{ quote.citation }}{% else %}{{ quote.citation_url }}{% endif %}">{% if quote.citation_url %}<a href="{{ quote.citation_url }}">{% endif %}{% if quote.citation %}{{ quote.citation }} {% else %}{{ quote.citation_url }}{% endif %}{% if quote.citation_url %}</a>{% endif %}</cite></figcaption>{% endif %}
 </figure>
-<a href="{% url 'quotes:quote_update' quote=quote.id %}" class="btn btn-primary">{% translate "Edit" %}</a> <a href="{% url 'quotes:quote_list' character=quote.character.slug %}" class="btn btn-secondary">{% translate "Back to quote list" %}</a>
-<p><a href="{% url 'quotes:quote_delete' quote=quote.id %}" class="btn btn-danger">{% translate "Delete" %}</a></p>
+</div>
+<div class="card-footer text-muted">
+  <small>{% translate "Created at" %} {{ quote.created }} {% translate "Last modifed at" %} {{ quote.modified }} {% translate "# Times Used" %}: {{ quote.stats.times_used }}</small>
+</div>
+  </div>
+  <p></p>
+<p><a href="{% url 'quotes:quote_update' quote=quote.id %}" class="btn btn-primary">{% translate "Edit" %}</a> <a href="{% url 'quotes:quote_list' character=quote.character.slug %}" class="btn btn-secondary">{% translate "Back to quote list" %}</a></p>
+<p class="text-end"><a href="{% url 'quotes:quote_delete' quote=quote.id %}" class="btn btn-danger">{% translate "Delete" %}</a></p>
 {% endblock %}
