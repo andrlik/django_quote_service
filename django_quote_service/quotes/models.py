@@ -96,9 +96,15 @@ class CharacterGroup(
     def markov_characters(self):
         return Character.objects.filter(group=self, allow_markov=True).count()
 
+    @cached_property
+    def total_quotes(self):
+        return Quote.objects.filter(
+            character__in=Character.objects.filter(group=self)
+        ).count()
+
     def refresh_from_db(self, *args, **kwargs):
         super().refresh_from_db(*args, **kwargs)
-        cached_properties = ["total_characters", "markov_characters"]
+        cached_properties = ["total_characters", "markov_characters", "total_quotes"]
         for prop in cached_properties:
             try:
                 del self.__dict__[prop]

@@ -1,8 +1,8 @@
 import pytest
 from django.db import IntegrityError
 
-from ...users.models import User
 from ..models import Character, CharacterGroup, Quote
+from ...users.models import User
 
 pytestmark = pytest.mark.django_db(transaction=True)
 
@@ -80,6 +80,7 @@ def property_group(user, corpus_sentences):
 def test_group_properties_calculation(property_group: CharacterGroup) -> None:
     assert property_group.total_characters == 10
     assert property_group.markov_characters == 5
+    assert property_group.total_quotes == 200
 
 
 def test_refresh_from_db_also_updates_cached_properties(
@@ -87,14 +88,18 @@ def test_refresh_from_db_also_updates_cached_properties(
 ) -> None:
     assert property_group.total_characters == 10
     assert property_group.markov_characters == 5
-    Character.objects.create(
+    assert property_group.total_quotes == 200
+    c = Character.objects.create(
         name="IamNew", group=property_group, allow_markov=True, owner=user
     )
+    Quote.objects.create(character=c, quote="I'm a new quote", owner=user)
     assert property_group.total_characters == 10
     assert property_group.markov_characters == 5
+    assert property_group.total_quotes == 200
     property_group.refresh_from_db()
     assert property_group.total_characters == 11
     assert property_group.markov_characters == 6
+    assert property_group.total_quotes == 201
 
 
 def test_retrieve_random_quote(property_group):
