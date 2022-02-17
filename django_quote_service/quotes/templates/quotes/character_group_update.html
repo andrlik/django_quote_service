@@ -2,6 +2,13 @@
 {% load i18n crispy_forms_filters %}
 {% block extratitle %}{% trans "Edit" %} {{ group.name }} - {% endblock %}
 {% block content %}
+      <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'quotes:group_list' %}">{% translate "Groups" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'quotes:group_detail' group=group.slug %}">{{ group.name }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{% translate "Edit" %}</li>
+  </ol>
+  </nav>
 <h1>{% trans "Editing" %} {{ group.name }}</h1>
 <form method="post" action="">{% csrf_token %}
   {{ form|crispy }}
