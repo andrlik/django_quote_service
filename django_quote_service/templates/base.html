@@ -56,6 +56,9 @@
                 <li class="nav-item">
                 <a class="nav-link" href="{% url 'quotes:group_list' %}">{% translate "Your Groups" %}</a>
                 </li>
+                {% if request.user.is_superuser %}
+                  <li class="nav-item"><a class="nav-link" href="{% url 'admin:index' %}">{% translate "Admin" %}</a></li>
+                  {% endif %}
                 <li class="nav-item">
                   {# URL provided by django-allauth/account/urls.py #}
                   <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% translate "My Profile" %}</a>
