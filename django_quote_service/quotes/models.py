@@ -90,18 +90,73 @@ class CharacterGroup(
     )
 
     @cached_property
-    def total_characters(self):
+    def total_characters(self) -> int:
         return Character.objects.filter(group=self).count()
 
     @cached_property
-    def markov_characters(self):
+    def markov_characters(self) -> int:
         return Character.objects.filter(group=self, allow_markov=True).count()
 
     @cached_property
-    def total_quotes(self):
+    def total_quotes(self) -> int:
         return Quote.objects.filter(
             character__in=Character.objects.filter(group=self)
         ).count()
+
+    @cached_property
+    def markov_ready(self) -> bool:
+        if (
+            self.markov_characters > 0
+            and Quote.objects.filter(
+                character__in=self.character_set.filter(allow_markov=True)
+            ).count()
+            > 10
+        ):
+            return True
+        return False
+
+    def generate_markov_sentence(
+        self, max_characters: Optional[int] = 280
+    ) -> Optional[str]:
+        """
+        Generate a markov sentence based on quotes from markov enabled characters for the group.
+
+        :return: str or None
+        """
+        if self.markov_ready:
+            logger.debug("Group is ready for markov sentences. Checking model...")
+            mmodel = GroupMarkovModel.objects.get(group=self)
+            if mmodel.data is None:
+                logger.debug(
+                    "Markov model for group is not generated yet! Generating..."
+                )
+                mmodel.generate_model_from_corpus()
+            logger.debug("Loading text model...")
+            text_model = MarkovPOSText.from_json(mmodel.data)
+            logger.debug("Generating sentence...")
+            sentence = text_model.make_short_sentence(max_chars=max_characters)
+            if sentence is not None:
+                logger.debug(f"Returning generated sentence: '{sentence}'")
+                return sentence
+        logger.debug("Group is not ready for markov requests yet!")
+        return None
+
+    def get_random_quote(self, max_quotes_to_process: Optional[int] = 50) -> Any:
+        """
+        Get a random quote object from any of the characters defined within the group.
+
+        :return: ``Quote`` object or None if no quotes are defined.
+        """
+        quotes = Quote.objects.filter(character__in=self.character_set.all())[
+            :max_quotes_to_process
+        ]
+        if quotes.exists():
+            quote = random.choice(list(quotes))
+            quote_random_retrieved.send(
+                type(quote.character), instance=quote.character, quote_retrieved=quote
+            )
+            return quote
+        return None
 
     def refresh_from_db(self, *args, **kwargs):
         super().refresh_from_db(*args, **kwargs)
@@ -350,6 +405,52 @@ class CharacterMarkovModel(TimeStampedModel):
 
     def __str__(self):  # pragma: nocover
         return self.character.name
+
+
+class GroupMarkovModel(TimeStampedModel):
+    """
+    The cached markov model for the entire group. It is made up of every quote from every markov enabled
+    character within the group.
+
+    Attributes:
+        id (int): The database id of this object.
+        group (CharacterGroup): The OneToOne relationship to ``CharacterGroup``
+        data (json): The cached markov model.
+        created (datetime): When the object was created.
+        modified (datetime): When the object was last modified.
+    """
+
+    group = models.OneToOneField(
+        CharacterGroup,
+        on_delete=models.CASCADE,
+        help_text=_("The character group this model belongs to."),
+    )
+    data = models.JSONField(
+        null=True, blank=True, help_text=_("The cached markov model as JSON.")
+    )
+
+    def generate_model_from_corpus(self):
+        """
+        Collect all quotes from markov enabled characters in this group and then compile the model and save it.
+        """
+        logger.debug(f"Gathering corpus for character group: {self.group.name}")
+        quotes = Quote.objects.filter(
+            character__in=Character.objects.filter(group=self.group, allow_markov=True)
+        )
+        if quotes.exists():
+            if quotes.count() >= 10:
+                logger.debug("Found sufficient quotes for a model!")
+                corpus = " ".join(quote.quote for quote in quotes)
+                logger.debug("Forming text model...")
+                text_model = MarkovPOSText(corpus)
+                logger.debug("Compiling text model...")
+                text_model.compile(inplace=True)
+                logger.debug("Saving compiled model to JSON...")
+                self.data = text_model.to_json()
+                self.save()
+                logger.debug(
+                    f"Finished building and saving group markov model for {self.group.name}!"
+                )
 
 
 class QuoteStats(TimeStampedModel):

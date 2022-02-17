@@ -9,6 +9,7 @@ from .models import (
     CharacterGroup,
     CharacterMarkovModel,
     CharacterStats,
+    GroupMarkovModel,
     GroupStats,
     Quote,
     QuoteStats,
@@ -34,6 +35,15 @@ def render_quote(sender, instance, *args, **kwargs):
     Render the quote via markdown and save the results.
     """
     instance.quote_rendered = markdown(instance.quote)
+
+
+@receiver(post_save, sender=CharacterGroup)
+def initialize_group_markov_object(sender, instance, created, *args, **kwargs):
+    """
+    Creates the one-to-one object for the group markov model.
+    """
+    if created:
+        GroupMarkovModel.objects.create(group=instance)
 
 
 @receiver(post_save, sender=Character)

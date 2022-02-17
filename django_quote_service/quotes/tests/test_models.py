@@ -122,3 +122,35 @@ def test_generate_markov_sentence(property_group):
     sentence = quotable_character.get_markov_sentence()
     print(sentence)
     assert isinstance(sentence, str)
+
+
+def test_get_random_group_quote(property_group):
+    noquote_group = CharacterGroup.objects.create(
+        name="I am no one.", owner=property_group.owner
+    )
+    assert noquote_group.get_random_quote() is None
+    assert isinstance(property_group.get_random_quote(), Quote)
+
+
+def test_group_generate_markov_sentence(property_group, corpus_sentences):
+    no_quote_group = CharacterGroup.objects.create(
+        name="We are no one.", owner=property_group.owner
+    )
+    Character.objects.create(
+        name="John Doe",
+        group=no_quote_group,
+        allow_markov=True,
+        owner=property_group.owner,
+    )
+    quote_character = Character.objects.create(
+        name="Jane Doe",
+        group=no_quote_group,
+        allow_markov=False,
+        owner=property_group.owner,
+    )
+    for sentence in corpus_sentences:
+        Quote.objects.create(
+            character=quote_character, quote=sentence, owner=property_group.owner
+        )
+    assert no_quote_group.generate_markov_sentence() is None
+    assert property_group.generate_markov_sentence() is not None

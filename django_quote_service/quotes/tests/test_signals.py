@@ -6,6 +6,7 @@ from ..models import (
     CharacterGroup,
     CharacterMarkovModel,
     CharacterStats,
+    GroupMarkovModel,
     GroupStats,
     Quote,
     QuoteStats,
@@ -75,6 +76,14 @@ def test_character_creation_allow_creates_markov_model_object(user: User) -> Non
     group = CharacterGroup.objects.create(name="Monkey", owner=user)
     character = Character.objects.create(name="Curious George", group=group, owner=user)
     assert CharacterMarkovModel.objects.get(character=character)
+
+
+def test_group_creation_creates_markov_model(user: User) -> None:
+    """
+    Ensure that creating a character group also creates a GroupMarkov instance.
+    """
+    group = CharacterGroup.objects.create(name="Monkey", owner=user)
+    assert GroupMarkovModel.objects.get(group=group)
 
 
 def test_character_group_creation_generates_stats_object(user: User) -> None:
