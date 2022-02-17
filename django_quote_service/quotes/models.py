@@ -16,6 +16,7 @@ from .rules import (  # is_character_owner,; is_group_owner_and_authenticated,
     is_owner,
     is_owner_or_public,
 )
+from .signals import markov_sentence_generated, quote_random_retrieved
 
 
 class AbstractOwnerModel(models.Model):
@@ -208,7 +209,10 @@ class Character(
                 markov_model.generate_model_from_corpus()
             text_model = MarkovPOSText.from_json(markov_model.data)
             logger.debug("Markov text model loaded. Generating sentence.")
-            return text_model.make_short_sentence(max_chars=max_characters)
+            sentence = text_model.make_short_sentence(max_chars=max_characters)
+            if sentence is not None:
+                markov_sentence_generated.send(type(self), instance=self)
+                return sentence
         return None
 
     def get_random_quote(
@@ -228,7 +232,11 @@ class Character(
         )
         if quotes_to_pick.exists():
             # Select a random index in the result set.
-            return random.choice(list(quotes_to_pick))
+            quote_to_return = random.choice(list(quotes_to_pick))
+            quote_random_retrieved.send(
+                type(self), instance=self, quote_retrieved=quote_to_return
+            )
+            return quote_to_return
         return None
 
     def __str__(self):  # pragma: nocover
