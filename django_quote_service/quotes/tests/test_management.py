@@ -3,7 +3,7 @@ from io import StringIO
 import pytest
 from django.core.management import call_command
 
-from ..models import CharacterGroup, GroupMarkovModel, CharacterMarkovModel
+from ..models import CharacterGroup, CharacterMarkovModel, GroupMarkovModel
 
 pytestmark = pytest.mark.django_db(transaction=True)
 
