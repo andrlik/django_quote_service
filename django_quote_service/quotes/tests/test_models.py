@@ -61,22 +61,6 @@ def test_reject_character_duplicate_slug(
         )
 
 
-@pytest.fixture
-def property_group(user, corpus_sentences):
-    cg = CharacterGroup.objects.create(name="Wranglin Robots", owner=user)
-    for x in range(10):
-        allow_markov = False
-        if x % 2 == 0:
-            allow_markov = True
-        c = Character.objects.create(
-            name=str(x), group=cg, allow_markov=allow_markov, owner=user
-        )
-        for quote in corpus_sentences:
-            Quote.objects.create(quote=quote, character=c, owner=user)
-    yield cg
-    cg.delete()
-
-
 def test_group_properties_calculation(property_group: CharacterGroup) -> None:
     assert property_group.total_characters == 10
     assert property_group.markov_characters == 5
