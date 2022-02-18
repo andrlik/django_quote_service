@@ -4,6 +4,7 @@ from typing import List
 
 import pytest
 
+from django_quote_service.quotes.models import Character, CharacterGroup, Quote
 from django_quote_service.users.models import User
 from django_quote_service.users.tests.factories import UserFactory
 
@@ -71,3 +72,19 @@ def corpus_sentences() -> List[str]:
         "She was amazed by the large chunks of ice washing up on the beach.",
         "Henry couldn't decide if he was an auto mechanic or a priest.",
     ]
+
+
+@pytest.fixture
+def property_group(user, corpus_sentences):
+    cg = CharacterGroup.objects.create(name="Wranglin Robots", owner=user)
+    for x in range(10):
+        allow_markov = False
+        if x % 2 == 0:
+            allow_markov = True
+        c = Character.objects.create(
+            name=str(x), group=cg, allow_markov=allow_markov, owner=user
+        )
+        for quote in corpus_sentences:
+            Quote.objects.create(quote=quote, character=c, owner=user)
+    yield cg
+    cg.delete()
