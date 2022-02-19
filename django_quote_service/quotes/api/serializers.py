@@ -6,7 +6,7 @@ from ..models import Character, CharacterGroup, Quote
 class CharacterSerializer(ModelSerializer):
     class Meta:
         model = Character
-        fields = ["name", "group", "description", "description_rendered"]
+        fields = ["name", "group", "slug", "description", "description_rendered"]
 
 
 class CharacterGroupSerializer(ModelSerializer):
