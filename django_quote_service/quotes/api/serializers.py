@@ -22,4 +22,4 @@ class QuoteSerializer(ModelSerializer):
 
     class Meta:
         model = Quote
-        fields = ["quote", "quote_rendered", "character"]
+        fields = ["quote", "quote_rendered", "character", "citation", "citation_url"]
