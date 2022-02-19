@@ -13,8 +13,8 @@ else:
     router = SimpleRouter()
 
 router.register("users", UserViewSet)
-router.register("groups", CharacterGroupViewSet)
-router.register("characters", CharacterViewSet)
+router.register("groups", CharacterGroupViewSet, basename="group")
+router.register("characters", CharacterViewSet, basename="character")
 
 
 app_name = "api"

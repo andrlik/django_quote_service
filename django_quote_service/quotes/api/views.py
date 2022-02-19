@@ -20,6 +20,16 @@ class CharacterGroupViewSet(
     serializer_class = CharacterGroupSerializer
     lookup_field = "slug"
     lookup_url_kwarg = "group"
+    permission_type_map = {
+        "create": "add",
+        "destroy": "delete",
+        "list": None,
+        "partial_update": "change",
+        "retrieve": "read",
+        "update": "change",
+        "get_random_quote": "read",
+        "generate_sentence": "read",
+    }
 
     def get_queryset(self, *args, **kwargs):
         return CharacterGroup.objects.filter(
@@ -27,9 +37,9 @@ class CharacterGroupViewSet(
         ) | CharacterGroup.objects.filter(public=True)
 
     @action(detail=True, methods=["get"])
-    def get_random_quote(self, request, pk=None):
-        group = self.get_object()
-        quote = group.get_random_quote()
+    def get_random_quote(self, request, group=None):
+        g = self.get_object()
+        quote = g.get_random_quote()
         if quote is not None:
             qs = QuoteSerializer(quote)
             return Response(status=status.HTTP_200_OK, data=qs.data)
@@ -38,16 +48,16 @@ class CharacterGroupViewSet(
         )
 
     @action(detail=True, methods=["get"])
-    def generate_sentence(self, request, pk=None):
-        group = self.get_object()
-        if group.markov_characters == 0:
+    def generate_sentence(self, request, group=None):
+        g = self.get_object()
+        if g.markov_characters == 0:
             return Response(
                 status=status.HTTP_403_FORBIDDEN,
                 data={
                     "error": "This group does not currently allow sentence generation."
                 },
             )
-        sentence = group.generate_markov_sentence()
+        sentence = g.generate_markov_sentence()
         if sentence is not None:
             return Response(status=status.HTTP_200_OK, data={"sentence": sentence})
         return Response(
@@ -66,6 +76,16 @@ class CharacterViewSet(
     serializer_class = CharacterSerializer
     lookup_field = "slug"
     lookup_url_kwarg = "character"
+    permission_type_map = {
+        "create": "add",
+        "destroy": "delete",
+        "list": None,
+        "partial_update": "change",
+        "retrieve": "read",
+        "update": "change",
+        "get_random_quote": "read",
+        "generate_sentence": "read",
+    }
 
     def get_queryset(self, *args, **kwargs):
         group_slug = self.request.query_params.get("group")
@@ -81,7 +101,7 @@ class CharacterViewSet(
         return queryset
 
     @action(detail=True, methods=["get"])
-    def get_random_quote(self, request, pk=None):
+    def get_random_quote(self, request, character=None):
         character = self.get_object()
         quote = character.get_random_quote()
         if quote is not None:
@@ -92,14 +112,14 @@ class CharacterViewSet(
         )
 
     @action(detail=True, methods=["get"])
-    def generate_sentence(self, request, pk=None):
+    def generate_sentence(self, request, character=None):
         character = self.get_object()
         if not character.allow_markov:
             return Response(
                 status=status.HTTP_403_FORBIDDEN,
                 data={"error": "This character does not permit sentence generation."},
             )
-        sentence = character.generate_markov_sentence()
+        sentence = character.get_markov_sentence()
         if sentence is not None:
             return Response(status=status.HTTP_200_OK, data={"sentence": sentence})
         return Response(

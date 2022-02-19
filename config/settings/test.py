@@ -17,6 +17,8 @@ SECRET_KEY = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#test-runner
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
 
+REST_FRAMEWORK["TEST_REQUEST_DEFAULT_FORMAT"] = "json"  # noqa
+
 # PASSWORDS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
@@ -29,6 +31,12 @@ EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-
+LOGGING["loggers"] = {  # noqa
+    "rules": {
+        "handlers": ["console"],
+        "level": "DEBUG",
+        "propagate": True,
+    }
+}
 
 load_loguru(globals())
