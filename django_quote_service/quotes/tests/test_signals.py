@@ -149,3 +149,48 @@ def test_markov_stat_signal(statable_character):
     statable_character.refresh_from_db()
     assert char_quotes_generated < statable_character.stats.quotes_generated
     assert group_quotes_generated < statable_character.group.stats.quotes_generated
+
+
+# def test_quote_create_edit_markov_generation_signal(property_group):
+#     character = property_group.character_set.filter(allow_markov=True)[0]
+#     cmodel_lastmodify = CharacterMarkovModel.objects.get(character=character).modified
+#     gmodel_lastmodify = GroupMarkovModel.objects.get(group=property_group).modified
+#     q = Quote.objects.create(
+#         quote="I am a new quote, full of exciting things to think about.",
+#         character=character,
+#         owner=property_group.owner,
+#         citation="Some episode",
+#     )
+#     assert (
+#         cmodel_lastmodify
+#         < CharacterMarkovModel.objects.get(character=character).modified
+#     )
+#     assert (
+#         gmodel_lastmodify < GroupMarkovModel.objects.get(group=property_group).modified
+#     )
+#     cmodel_lastmodify = CharacterMarkovModel.objects.get(character=character).modified
+#     gmodel_lastmodify = GroupMarkovModel.objects.get(group=property_group).modified
+#     q.quote = "Let's change things up a bit with a new quote."
+#     q.save()
+#     assert (
+#         cmodel_lastmodify
+#         < CharacterMarkovModel.objects.get(character=character).modified
+#     )
+#     assert (
+#         gmodel_lastmodify < GroupMarkovModel.objects.get(group=property_group).modified
+#     )
+#
+#
+def test_character_set_to_allow_markov_regenerates_models(property_group):
+    character = property_group.character_set.filter(allow_markov=False)[0]
+    cmodel_lastmodify = CharacterMarkovModel.objects.get(character=character).modified
+    gmodel_lastmodify = GroupMarkovModel.objects.get(group=property_group).modified
+    character.allow_markov = True
+    character.save()
+    assert (
+        cmodel_lastmodify
+        < CharacterMarkovModel.objects.get(character=character).modified
+    )
+    assert (
+        gmodel_lastmodify < GroupMarkovModel.objects.get(group=property_group).modified
+    )

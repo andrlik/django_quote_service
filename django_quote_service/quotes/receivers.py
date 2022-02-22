@@ -109,3 +109,23 @@ def update_stats_for_markov(sender, instance, *args, **kwargs):
         group_stats.save()
         character_stats.quotes_generated = F("quotes_generated") + 1
         character_stats.save()
+
+
+# @receiver(post_save, sender=Quote)
+# def update_markov_model_on_quote_change(sender, instance, created, *args, **kwargs):
+#     if instance.character.allow_markov:
+#         cmm = CharacterMarkovModel.objects.get(character=instance.character)
+#         cmm.generate_model_from_corpus()
+
+
+@receiver(pre_save, sender=Character)
+def update_markov_model_for_character_enabling_markov(
+    sender, instance, *args, **kwargs
+):
+    if instance.id and instance.allow_markov:
+        old_version = Character.objects.get(id=instance.id)
+        if not old_version.allow_markov:
+            cmm = CharacterMarkovModel.objects.get(character=instance)
+            gmm = GroupMarkovModel.objects.get(group=instance.group)
+            cmm.generate_model_from_corpus()
+            gmm.generate_model_from_corpus()

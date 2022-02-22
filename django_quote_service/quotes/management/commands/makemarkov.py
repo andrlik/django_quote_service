@@ -22,6 +22,7 @@ class Command(BaseCommand):
                     if quote_to_test.modified > cmm.modified:
                         cmm.generate_model_from_corpus()
                         characters_updated += 1
+                        update_group = True
             if update_group:
                 gmm.generate_model_from_corpus()
                 groups_updated += 1
