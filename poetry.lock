@@ -440,7 +440,7 @@ bcrypt = ["bcrypt"]
 
 [[package]]
 name = "django-allauth"
-version = "0.48.0"
+version = "0.49.0"
 description = "Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication."
 category = "main"
 optional = false
@@ -2372,7 +2372,7 @@ docs = ["Sphinx", "sphinx-autobuild"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "6346721c37b649040885b4754145b9e1087613af7aad813ee411c52e165adc8b"
+content-hash = "8b9d2f3efa86201d5ff27a75664521d2ae0e09bc368ce1e4b620bc89dab76201"
 
 [metadata.files]
 aiohttp = [
@@ -2827,7 +2827,7 @@ django = [
     {file = "Django-4.0.2.tar.gz", hash = "sha256:110fb58fb12eca59e072ad59fc42d771cd642dd7a2f2416582aa9da7a8ef954a"},
 ]
 django-allauth = [
-    {file = "django-allauth-0.48.0.tar.gz", hash = "sha256:531821ce6a2278168054add13421776c9f8e565cf39926e799fa02d6c29da920"},
+    {file = "django-allauth-0.49.0.tar.gz", hash = "sha256:f5fbb67376177c6a9276516dde98bcb01ac4160a5a27f7b340914dd521d04f12"},
 ]
 django-anymail = [
     {file = "django-anymail-8.5.tar.gz", hash = "sha256:677e937dc9e2671ca7631abb1d94ddc6b840beb3d53c0fbf699e866a6a9ba92f"},
