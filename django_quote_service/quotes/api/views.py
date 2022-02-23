@@ -1,6 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
+from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.fields import CharField
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -36,6 +38,7 @@ class CharacterGroupViewSet(
             owner=self.request.user
         ) | CharacterGroup.objects.filter(public=True)
 
+    @extend_schema(responses={200: QuoteSerializer})
     @action(detail=True, methods=["get"])
     def get_random_quote(self, request, group=None):
         g = self.get_object()
@@ -47,6 +50,13 @@ class CharacterGroupViewSet(
             status=status.HTTP_404_NOT_FOUND, data={"error": "No quotes found."}
         )
 
+    @extend_schema(
+        responses={
+            200: inline_serializer(
+                name="generated_sentence", fields={"sentence": CharField()}
+            )
+        }
+    )
     @action(detail=True, methods=["get"])
     def generate_sentence(self, request, group=None):
         g = self.get_object()
@@ -100,6 +110,7 @@ class CharacterViewSet(
             queryset = queryset.filter(group=group)
         return queryset
 
+    @extend_schema(responses={200: QuoteSerializer})
     @action(detail=True, methods=["get"])
     def get_random_quote(self, request, character=None):
         character = self.get_object()
@@ -111,6 +122,13 @@ class CharacterViewSet(
             status=status.HTTP_404_NOT_FOUND, data={"error": "No quotes found."}
         )
 
+    @extend_schema(
+        responses={
+            200: inline_serializer(
+                name="generated_sentence", fields={"sentence": CharField()}
+            )
+        }
+    )
     @action(detail=True, methods=["get"])
     def generate_sentence(self, request, character=None):
         character = self.get_object()
