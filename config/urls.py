@@ -18,7 +18,7 @@ urlpatterns = [
     # User management
     path("users/", include("django_quote_service.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
-    path("app/", include("django_quote_service.quotes.urls", namespace="quotes")),
+    path("app/", include("django_quotes.urls", namespace="quotes")),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:

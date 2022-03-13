@@ -79,11 +79,12 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "drf_spectacular",
     "rules.apps.AutodiscoverRulesConfig",
+    "django_quotes",
 ]
 
 LOCAL_APPS = [
     "django_quote_service.users",
-    "django_quote_service.quotes",
+    # "django_quote_service.quotes",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
