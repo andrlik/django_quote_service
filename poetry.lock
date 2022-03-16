@@ -608,7 +608,7 @@ Django = ">=2.0.1"
 
 [[package]]
 name = "django-quotes"
-version = "0.1.1"
+version = "0.1.2"
 description = "A reusable Django app to collect quotes for use in random retrieval or generation of sentences using Markov Chains."
 category = "main"
 optional = false
@@ -2397,7 +2397,7 @@ docs = ["Sphinx", "sphinx-autobuild"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "3f70bc9854e04c173e97173b2050a6a3616210f3b8ba2a043108800567c85b93"
+content-hash = "f3196f5bc0023394e66c223c2030794da8bf7b0d92b235c418daffb3a11d8d5d"
 
 [metadata.files]
 aiohttp = [
@@ -2892,8 +2892,8 @@ django-model-utils = [
     {file = "django_model_utils-4.2.0-py3-none-any.whl", hash = "sha256:a768a25c80514e0ad4e4a6f9c02c44498985f36c5dfdea47b5b1e8cf994beba6"},
 ]
 django-quotes = [
-    {file = "django-quotes-0.1.1.tar.gz", hash = "sha256:0541d753692ab73346ebbcbcb55995394db46a5b89582733dfcb939c0640cd8a"},
-    {file = "django_quotes-0.1.1-py3-none-any.whl", hash = "sha256:44085b5e006ed886bae5a3eaa7f6caeae98769f2722e710d030392099ef8dee2"},
+    {file = "django-quotes-0.1.2.tar.gz", hash = "sha256:0b5209cf235dd8f6412bc479daa57cda06521887e72b1e5aa566bd58bf334c91"},
+    {file = "django_quotes-0.1.2-py3-none-any.whl", hash = "sha256:56e51f377be22df11402fc0ff311b5b85f8afa5c3d29d9080a129ca8e99034db"},
 ]
 django-redis = [
     {file = "django-redis-5.2.0.tar.gz", hash = "sha256:8a99e5582c79f894168f5865c52bd921213253b7fd64d16733ae4591564465de"},
