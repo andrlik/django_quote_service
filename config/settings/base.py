@@ -317,5 +317,12 @@ SPECTACULAR_SETTINGS = {
         {"url": "https://quoteservice.andrlik.org", "description": "Production server"},
     ],
 }
+
+# DJANGO-QUOTES
+# ------------------------------------------------------------------------------
+MAX_QUOTES_FOR_RANDOM_SET = 10
+
+MAX_QUOTES_FOR_RANDOM_GROUP_SET = 15
+
 # Your stuff...
 # ------------------------------------------------------------------------------
