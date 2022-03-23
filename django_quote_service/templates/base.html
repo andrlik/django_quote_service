@@ -98,7 +98,14 @@
       {% endif %}
 
       {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
+        <div class="col-sm-6">
+        <h1>{% translate "Welcome to Quote Service!" %}</h1>
+
+        <p>{% blocktranslate %}You can use this service to collect groups of quotes that you want to retrieve later.
+          The most fun way to use this service is to collect the quotes and then have bots hit up our API in order to
+          do things like fetch random quotes or even generate sentences based on the quotes using
+          <a href="https://brilliant.org/wiki/markov-chains/">Markov chain</a> text models.{% endblocktranslate %}</p>
+        </div>
       {% endblock content %}
 
     </div> <!-- /container -->

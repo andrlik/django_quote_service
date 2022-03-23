@@ -1,1 +1,6 @@
 {% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+<h1>{% translate "About this Site" %}</h1>
+  <p>{% translate "This site was made by" %} <a href="https://www.andrlik.org/">Daniel Andrlik</a>.</p>
+{% endblock %}
