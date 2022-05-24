@@ -14,7 +14,6 @@ else:
 
 END
 }
-
 if compress_enabled
 then
   python manage.py compress

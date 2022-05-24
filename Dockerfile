@@ -25,8 +25,10 @@ ENV PATH="$POETRY_HOME/bin:$PATH"
 
 WORKDIR $APP_PATH
 COPY ./poetry.lock ./pyproject.toml ./manage.py ./pytest.ini ./.pylintrc ./
+COPY ./bin ./bin
 COPY ./config ./config
 COPY ./locale ./locale
+COPY ./staticfiles ./staticfiles
 COPY ./$APP_NAME ./$APP_NAME
 
 # Stage: development
@@ -37,7 +39,6 @@ ARG APP_PATH
 # Install project in editable mode
 WORKDIR $APP_PATH
 RUN poetry install
-EXPOSE 8000
 
 ENV DJANGO_DEBUG=True \
     DJANGO_SETTINGS_MODULE=config.settings.local \
@@ -47,5 +48,21 @@ ENTRYPOINT ["poetry", "run"]
 CMD ["./manage.py", "runserver", "0.0.0.0:8000"]
 
 # Stage: production
+FROM staging as production
+ARG APP_NAME
+ARG APP_PATH
+
+WORKDIR $APP_PATH
+RUN poetry install --no-dev
+
+ENV DJANGO_DEBUG=False \
+    DJANGO_SETTINGS_MODULE=config.settings.production
+
+RUN poetry run python manage.py collectstatic --noinput
+RUN poetry run python manage.py compress
+RUN poetry run python manage.py collectstatic --noinput
+
+ENTRYPOINT ["poetry", "run"]
+CMD ["gunicorn", "config.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8080"]
 
 
