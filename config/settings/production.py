@@ -19,7 +19,9 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["example.com"])
 
 # DATABASES
 # ------------------------------------------------------------------------------
-DATABASES["default"] = env.db("DATABASE_URL", default="sqlite://imafakedatabase.sqlite")  # noqa F405
+DATABASES["default"] = env.db(  # noqa F405
+    "DATABASE_URL", default="sqlite://imafakedatabase.sqlite"
+)
 DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa F405
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=600)  # noqa F405
 

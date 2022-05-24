@@ -64,5 +64,3 @@ RUN poetry run python manage.py collectstatic --noinput
 
 ENTRYPOINT ["poetry", "run"]
 CMD ["gunicorn", "config.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8080"]
-
-
