@@ -25,7 +25,7 @@ psycopg2 = "^2.9.3"
 sentry-sdk = "^1.5.4"
 django-storages = {extras = ["boto3"], version = "^1.12.3"}
 django-anymail = {extras = ["sendgrid"], version = "^8.5"}
-django-compressor = "^3.1"
+django-compressor = "^4.1"
 Brotli = "^1.0.9"
 Sphinx = {version = "^5.2.0", optional=true}
 sphinx-autobuild = {version = "^2021.3.14", optional=true}
@@ -54,7 +54,7 @@ pylint-django = "^2.5.0"
 pre-commit = "^2.19.0"
 factory-boy = "^3.2.1"
 django-debug-toolbar = "^3.2.4"
-django-extensions = "^3.1.5"
+django-extensions = "^3.2.1"
 django-coverage-plugin = "^2.0.2"
 pytest-django = "^4.5.2"
 pytest-cov = "^3.0.0"

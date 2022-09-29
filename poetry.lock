@@ -517,7 +517,7 @@ Django = ">=2.2"
 
 [[package]]
 name = "django-compressor"
-version = "3.1"
+version = "4.1"
 description = "Compresses linked and inline JavaScript or CSS into single cached files."
 category = "main"
 optional = false
@@ -2474,7 +2474,7 @@ docs = ["Sphinx", "sphinx-autobuild"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "cbf043b7bcb9ab7d8f722b917a06389fe40c48b94999ed6210b1b9577fb36486"
+content-hash = "e904038913dea5924e2935a75f4144f6e0b2283beab51865a3975480a3964026"
 
 [metadata.files]
 aiohttp = []
@@ -2668,10 +2668,7 @@ django-braces = [
     {file = "django-braces-1.15.0.tar.gz", hash = "sha256:f451d08ffc1078d81209a2e17f2219bce20196928853c82405451b18a46875e0"},
     {file = "django_braces-1.15.0-py2.py3-none-any.whl", hash = "sha256:28f00b0f98368c9a37f30cce6087fc57127f0a24c5b8b449f9e1245bded6405d"},
 ]
-django-compressor = [
-    {file = "django_compressor-3.1-py2.py3-none-any.whl", hash = "sha256:89f7ba86777b30672c2f9c7557bf2aff87c5890903c73b1fa3ae38acd143e855"},
-    {file = "django_compressor-3.1.tar.gz", hash = "sha256:c4a87bf65f9a534cfaf1c321a000a229c24e50c6d62ba6ab089482db42e819d9"},
-]
+django-compressor = []
 django-cors-headers = [
     {file = "django-cors-headers-3.13.0.tar.gz", hash = "sha256:f9dc6b4e3f611c3199700b3e5f3398c28757dcd559c2f82932687f3d0443cfdf"},
     {file = "django_cors_headers-3.13.0-py3-none-any.whl", hash = "sha256:37e42883b5f1f2295df6b4bba96eb2417a14a03270cb24b2a07f021cd4487cf4"},
