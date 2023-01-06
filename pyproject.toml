@@ -57,7 +57,7 @@ django-debug-toolbar = "^3.2.4"
 django-extensions = "^3.2.1"
 django-coverage-plugin = "^2.0.2"
 pytest-django = "^4.5.2"
-pytest-cov = "^3.0.0"
+pytest-cov = "^4.0.0"
 # sphinx-rtd-theme = "^1.0.0"
 
 [tool.poetry.dependencies.en_core_web_sm]
