@@ -14,7 +14,7 @@ def media_storage(settings, tmpdir):
 
 @pytest.fixture
 def user() -> User:
-    return UserFactory()
+    return UserFactory()  # type: ignore
 
 
 # Enabling testing for view documentation per: https://simonwillison.net/2018/Jul/28/documentation-unit-tests/
@@ -25,7 +25,7 @@ label_re = re.compile(r"\.\. _([^\s:]+):")
 
 def get_headings(filename, underline="-"):
     content = (docs_path / filename).open().read()
-    heading_re = re.compile(r"(\S+)\n\{}+\n".format(underline))
+    heading_re = re.compile(rf"(\S+)\n\{underline}+\n")
     return set(heading_re.findall(content))
 
 

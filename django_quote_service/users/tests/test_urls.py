@@ -5,10 +5,7 @@ pytestmark = pytest.mark.django_db
 
 
 def test_detail(user, client):
-    assert (
-        reverse("users:detail", kwargs={"username": user.username})
-        == f"/users/{user.username}/"
-    )
+    assert reverse("users:detail", kwargs={"username": user.username}) == f"/users/{user.username}/"
     assert resolve(f"/users/{user.username}/").view_name == "users:detail"
     client.force_login(user=user)
     r = client.get(reverse("users:detail", kwargs={"username": user.username}))

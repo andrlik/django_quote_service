@@ -15,7 +15,7 @@ import sys
 
 import django
 
-if os.getenv("READTHEDOCS", default=False) == "True":
+if os.getenv("READTHEDOCS", default="False") == "True":
     sys.path.insert(0, os.path.abspath(".."))
     os.environ["DJANGO_READ_DOT_ENV_FILE"] = "True"
     os.environ["USE_DOCKER"] = "no"
@@ -28,7 +28,7 @@ django.setup()
 # -- Project information -----------------------------------------------------
 
 project = "Django Quote Service"
-copyright = """2022, Daniel Andrlik"""
+copyright = """2022, Daniel Andrlik"""  # noqa: A001
 author = "Daniel Andrlik"
 
 
@@ -67,9 +67,10 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 
 def run_apidoc(_):
-    from sphinx.ext.apidoc import main
     import os
     import sys
+
+    from sphinx.ext.apidoc import main
 
     sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
     cur_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), "api")

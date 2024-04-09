@@ -1,71 +1,232 @@
-[tool.poetry]
+[project]
 name = "django_quote_service"
 version = "0.1.0"
 description = "A simple service for collecting character quotes and exposing random quotes or markov chain generated quotes via an API."
-authors = ["Daniel Andrlik <daniel@andrlik.org>"]
-license = "BSD"
+authors = [{ name = "Daniel Andrlik", email = "daniel@andrlik.org" }]
+license = "BSD-3-Clause"
+dependencies = [
+    "Pillow>=9.0.1",
+    "rcssmin>=1.1.0",
+    "argon2-cffi>=21.3.0",
+    "whitenoise>=6.0.0",
+    "hiredis>=2.0.0",
+    "django-redis>=5.2.0",
+    "django-environ>=0.8.1",
+    "uvicorn>=0.20.0",
+    "gunicorn>=20.1.0",
+    "django-allauth>=0.52.0",
+    "psycopg[binary]>=3.1.8",
+    "sentry-sdk>=1.5.4",
+    "django-storages[boto]>=1.12.3",
+    "django-anymail[sendgrid]>=8.5",
+    "django-compressor>=4.1",
+    "Brotli>=1.0.9",
+    "django-braces>=1.15.0",
+    "django-libsass>=0.9",
+    "django-easy-logging>=0.4.0",
+    "django-quotes>=0.4",
+    "crispy-bootstrap5>=2024.2",
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-pytz = "^2022.1"
-Pillow = "^9.0.1"
-rcssmin = "^1.1.0"
-argon2-cffi = "^21.3.0"
-whitenoise = "^6.0.0"
-redis = "^4.3.1"
-hiredis = "^2.0.0"
-uvicorn = "^0.20.0"
-django-environ = "^0.8.1"
-Django = "^4.0.2"
-crispy-bootstrap5 = "^0.6"
-django-redis = "^5.2.0"
-django-allauth = "^0.52.0"
-gunicorn = "^20.1.0"
-psycopg2 = "^2.9.3"
-sentry-sdk = "^1.5.4"
-django-storages = {extras = ["boto3"], version = "^1.12.3"}
-django-anymail = {extras = ["sendgrid"], version = "^8.5"}
-django-compressor = "^4.1"
-Brotli = "^1.0.9"
-Sphinx = {version = "^5.2.0", optional=true}
-sphinx-autobuild = {version = "^2021.3.14", optional=true}
-django-braces = "^1.15.0"
-django-easy-logging = "^0.4.0"
-django-libsass = "^0.9"
-django-quotes = "^0.3.2"
+[tool.rye]
+managed = true
+virtual = true
+dev-dependencies = [
+    "Werkzeug[watchdog]>=2.1.2",
+    "ipdb>=0.13.9",
+    "watchgod>=0.8",
+    "pytest>=7.0",
+    "pytest-sugar>=0.9.4",
+    "djangorestframework-types",
+    "django-debug-toolbar>=3.2.4",
+    "factory-boy>=3.2.1",
+    "pytest-cov>=3.0.0",
+    "django-coverage-plugin>=2.0.2",
+    "django-extensions>=3.2.1",
+    "en-core-web-trf @ https://github.com/explosion/spacy-models/releases/download/en_core_web_trf-3.7.3/en_core_web_trf-3.7.3-py3-none-any.whl",
+    "Sphinx>=5.2.0",
+    "sphinx-autobuild>=2021.3.14",
+    "pyright>=1.1.357",
+    "django-types>=0.19.1",
+    "types-factory-boy>=0.4.1",
+]
 
-[tool.poetry.dev-dependencies]
-Werkzeug = {extras = ["watchdog"], version = "^2.1.2"}
-ipdb = "^0.13.9"
-psycopg2-binary = "^2.9.3"
-watchgod = "^0.8"
-mypy = "^0.942"
-django-stubs = "^1.9.0"
-pytest = "^7.0.0"
-pytest-sugar = "^0.9.4"
-djangorestframework-stubs = "^1.4.0"
-Sphinx = "^5.2.0"
-sphinx-autobuild = "^2021.3.14"
-flake8 = "^4.0.1"
-flake8-isort = "^4.1.1"
-coverage = "^6.3.1"
-black = {extras = ["d"], version = "^22.3.0"}
-pylint-django = "^2.5.0"
-pre-commit = "^2.19.0"
-factory-boy = "^3.2.1"
-django-debug-toolbar = "^3.2.4"
-django-extensions = "^3.2.1"
-django-coverage-plugin = "^2.0.2"
-pytest-django = "^4.5.2"
-pytest-cov = "^3.0.0"
+#[tool.poetry.dev-dependencies]
+#Werkzeug = {extras = ["watchdog"], version = "^2.1.2"}
+#ipdb = "^0.13.9"
+#psycopg2-binary = "^2.9.3"
+#watchgod = "^0.8"
+#mypy = "^0.942"
+#django-stubs = "^1.9.0"
+#pytest = "^7.0.0"
+#pytest-sugar = "^0.9.4"
+#djangorestframework-stubs = "^1.4.0"
+#Sphinx = "^5.2.0"
+#sphinx-autobuild = "^2021.3.14"
+#flake8 = "^4.0.1"
+#flake8-isort = "^4.1.1"
+#coverage = "^6.3.1"
+#black = {extras = ["d"], version = "^22.3.0"}
+#pylint-django = "^2.5.0"
+#pre-commit = "^2.19.0"
+#factory-boy = "^3.2.1"
+#django-debug-toolbar = "^3.2.4"
+#django-extensions = "^3.2.1"
+#django-coverage-plugin = "^2.0.2"
+#pytest-django = "^4.5.2"
+#pytest-cov = "^3.0.0"
 # sphinx-rtd-theme = "^1.0.0"
 
-[tool.poetry.dependencies.en_core_web_sm]
-url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.4.1/en_core_web_sm-3.4.1.tar.gz"
-
-[tool.poetry.extras]
-docs = ["sphinx", "sphinx-autobuild"]
-
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.coverage.run]
+branch = true
+parallel = true
+source = ["django_quote_service"]
+plugins = ["django_coverage_plugin"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.black]
+# https://github.com/psf/black
+target-version = ["py311"]
+line-length = 120
+color = true
+
+exclude = '''
+/(
+    \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | migrations
+    | buck-out
+    | build
+    | dist
+    | env
+    | venv
+)/
+'''
+
+[tool.pytest.ini_options]
+# https://docs.pytest.org/en/6.2.x/customize.html#pyproject-toml
+# Directories that are not visited by pytest collector:
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+testpaths = ["tests", "django_quote_service"]
+django_find_project = false
+norecursedirs = ["hooks", "*.egg", ".eggs", "dist", "build", "docs", ".tox", ".git", "__pycache__", ".venv", "node_modules"]
+doctest_optionflags = ["NUMBER", "NORMALIZE_WHITESPACE", "IGNORE_EXCEPTION_DETAIL"]
+filterwarnings = [
+  "ignore::DeprecationWarning",
+  "ignore::PendingDeprecationWarning"
+]
+
+# Extra options:
+addopts = [
+  "--strict-markers",
+  "--tb=short",
+  "--doctest-modules",
+  "--doctest-continue-on-failure",
+  "--cov=django_quote_service",
+  "--cov-report=term-missing", "--ds=config.settings.test",
+    "--reuse-db",
+]
+
+[tool.check-wheel-contents]
+ignore = ["W004"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+extend-exclude = ["migrations"]
+
+[tool.ruff.lint]
+select = [
+  "A",
+  "ARG",
+  "B",
+  "C",
+  "DJ",
+  "DTZ",
+  "E",
+  "EM",
+  "F",
+  "FBT",
+  "I",
+  "ICN",
+  "ISC",
+  "N",
+  "PLC",
+  "PLE",
+  "PLR",
+  "PLW",
+  "Q",
+  "RUF",
+  "S",
+  "T",
+  "TID",
+  "UP",
+  "W",
+  "YTT",
+]
+ignore = [
+  # Allow non-abstract empty methods in abstract base classes
+  "B027",
+  # Allow boolean positional values in function calls, like `dict.get(... True)`
+  "FBT003",
+  # Ignore checks for possible passwords
+  "S105",
+  "S106",
+  "S107",
+  # Ignore complexity
+  "C901",
+  "PLR0911",
+  "PLR0912",
+  "PLR0913",
+  "PLR0915",
+  "DJ001",
+  "RUF012",
+  "ISC001",
+]
+unfixable = [
+  # Don't touch unused imports
+  "F401",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"*/tests/*.py" = ["S101", "FBT001", "ARG001", "ARG002", "E501", "PLR2004", "T201"]
+"config/urls.py" = ["RUF005"]
+"django_quote_service/users/adapters.py" = ["ARG002"]
+"django_quote_service/users/api/views.py" = ["ARG002"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["django_quote_service"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.pyright]
+pythonVersion = "3.11"
+exclude = ["**/migrations/",
+    "**/__pycache__",
+    ".venv",
+    "django_quote_service/users/tests",
+    "config/settings/*",
+]
+reportIncompatibleVariableOverride = false
+reportIncompatibleMethodOverride = false
+
+[tool.django-stubs]
+django_settings_module = "config.settings.test"

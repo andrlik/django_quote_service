@@ -4,13 +4,12 @@ With these settings, tests run faster.
 
 from dj_easy_log import load_loguru
 
-from .base import *  # noqa
-from .base import env
+from config.settings.base import *  # noqa: F403
 
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = env(
+SECRET_KEY = env(  # noqa: F405
     "DJANGO_SECRET_KEY",
     default="UKNSQClo0zUtSNlFq7wJYvMcIqMZrZ2MpwAKjDtBEAbvuJosEg1frjvmNX4HmA46",
 )

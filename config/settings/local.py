@@ -1,19 +1,18 @@
 from dj_easy_log import load_loguru
 
-from .base import *  # noqa
-from .base import env
+from config.settings.base import *  # noqa: F403
 
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = env.bool("DJANGO_DEBUG", default=True)
+DEBUG = env.bool("DJANGO_DEBUG", default=True)  # noqa: F405
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = env(
+SECRET_KEY = env(  # noqa: F405
     "DJANGO_SECRET_KEY",
     default="hI49KjCfH5pJ9ZKoGBlnhx1nj4jr0htToMsiBDWO9vejXeb7Zi1rIkZneWo2LQa6",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]  # noqa: S104
 
 # CACHES
 # ------------------------------------------------------------------------------
@@ -28,9 +27,7 @@ CACHES = {
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env(
-    "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend"
-)
+EMAIL_BACKEND = env("DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")  # noqa: F405
 
 # WhiteNoise
 # ------------------------------------------------------------------------------
@@ -42,7 +39,7 @@ INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS  # noqa F405
 # ------------------------------------------------------------------------------
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites
 if DEBUG:
-    INSTALLED_APPS += ["debug_toolbar"]  # noqa F405
+    INSTALLED_APPS += ["debug_toolbar"]  # F405
     # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
     MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]  # noqa F405
     # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
@@ -58,7 +55,7 @@ INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
 # ------------------------------------------------------------------------------
 # https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
 if DEBUG:
-    INSTALLED_APPS += ["django_extensions"]  # noqa F405
+    INSTALLED_APPS += ["django_extensions"]  # F405
 
 # Your stuff...
 # ------------------------------------------------------------------------------
@@ -66,12 +63,7 @@ if DEBUG:
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
-    "formatters": {
-        "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
-        }
-    },
+    "formatters": {"verbose": {"format": "%(levelname)s %(asctime)s %(module)s " "%(process)d %(thread)d %(message)s"}},
     "handlers": {
         "console": {
             "level": "DEBUG",

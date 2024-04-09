@@ -5,7 +5,7 @@ from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateMode
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from .serializers import UserSerializer
+from django_quote_service.users.api.serializers import UserSerializer
 
 User = get_user_model()
 
@@ -16,10 +16,9 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericV
     lookup_field = "username"
 
     def get_queryset(self, *args, **kwargs):
-        assert isinstance(self.request.user.id, int)
-        return self.queryset.filter(id=self.request.user.id)
+        return self.queryset.filter(id=self.request.user.id)  # type: ignore
 
     @action(detail=False)
     def me(self, request):
-        serializer = UserSerializer(request.user, context={"request": request})
+        serializer = UserSerializer(request.user, context={"request": request})  # type: ignore
         return Response(status=status.HTTP_200_OK, data=serializer.data)
