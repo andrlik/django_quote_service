@@ -1,3 +1,12 @@
+#
+# test_urls.py
+#
+# Copyright (c) 2024 Daniel Andrlik
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+#
+
 import pytest
 from django.urls import resolve, reverse
 

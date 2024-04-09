@@ -7,4 +7,4 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
-"""Django Settings for django_quote_service"""
+"""API module for the users app."""

@@ -1,3 +1,14 @@
+#
+# conftest.py
+#
+# Copyright (c) 2024 Daniel Andrlik
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+#
+
+"""Test fixtures for django_quote_service"""
+
 import re
 from pathlib import Path
 

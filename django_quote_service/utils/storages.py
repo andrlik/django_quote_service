@@ -1,3 +1,12 @@
+#
+# storages.py
+#
+# Copyright (c) 2022 - 2024 Daniel Andrlik
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+#
+
 from storages.backends.s3boto3 import S3Boto3Storage  # pragma: nocover
 
 

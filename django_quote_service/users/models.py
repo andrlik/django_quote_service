@@ -1,3 +1,12 @@
+#
+# models.py
+#
+# Copyright (c) 2022 - 2024 Daniel Andrlik
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+#
+
 from django.contrib.auth.models import AbstractUser
 from django.db.models import CharField
 from django.urls import reverse

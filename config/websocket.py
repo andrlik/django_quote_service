@@ -1,3 +1,12 @@
+#
+# websocket.py
+#
+# Copyright (c) 2024 Daniel Andrlik
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+#
+
 async def websocket_application(scope, receive, send):  # noqa: ARG001
     while True:
         event = await receive()
