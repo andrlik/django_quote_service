@@ -1,30 +1,22 @@
 ARG APP_NAME=django_quote_service
 ARG APP_PATH=/app
-ARG PYTHON_VERSION=3.11.0
-ARG POETRY_VERSION=1.2.2
+ARG PYTHON_VERSION=3.12.0
 
 # Stage: Staging
 FROM python:$PYTHON_VERSION as staging
 ARG APP_NAME
 ARG APP_PATH
-ARG POETRY_VERSION
 
 ENV \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONFAULTHANDLER=1
-ENV \
-    POETRY_VERSION=$POETRY_VERSION \
-    POETRY_HOME="/opt/poetry" \
-    POETRY_VIRTUALENVS_IN_PROJECT=true \
-    POETRY_NO_INTERACTION=1
 
-# Install Poetry - respects $POETRY_VERSION & $POETRY_HOME
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python
-ENV PATH="$POETRY_HOME/bin:$PATH"
+# Install uv
+RUN python -m pip install --upgrade uv pip
 
 WORKDIR $APP_PATH
-COPY ./poetry.lock ./pyproject.toml ./manage.py ./pytest.ini ./.pylintrc ./
+COPY ./pyproject.toml ./manage.py ./Justfile ./requirements.lock ./requirements-dev.lock ./
 COPY ./bin ./bin
 COPY ./config ./config
 COPY ./locale ./locale
@@ -38,13 +30,13 @@ ARG APP_PATH
 
 # Install project in editable mode
 WORKDIR $APP_PATH
-RUN poetry install
+RUN python -m uv pip install --system -r requirements-dev.lock
 
 ENV DJANGO_DEBUG=True \
     DJANGO_SETTINGS_MODULE=config.settings.local \
     DATABASE_URL=postgres://daniel@192.168.7.31:5432/django_quote_service
 
-ENTRYPOINT ["poetry", "run"]
+ENTRYPOINT ["python", "-m"]
 CMD ["./manage.py", "runserver", "0.0.0.0:8000"]
 
 # Stage: production
@@ -53,14 +45,15 @@ ARG APP_NAME
 ARG APP_PATH
 
 WORKDIR $APP_PATH
-RUN poetry install --no-dev
+RUN python -m uv pip install --system -r requirements.lock
+RUN python -m spacy download en_core_web_trf
 
 ENV DJANGO_DEBUG=False \
     DJANGO_SETTINGS_MODULE=config.settings.production
 
-RUN poetry run python manage.py collectstatic --noinput
-RUN poetry run python manage.py compress
-RUN poetry run python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput
+RUN python manage.py compress
+RUN python manage.py collectstatic --noinput
 
-ENTRYPOINT ["poetry", "run"]
+ENTRYPOINT ["python", "-m"]
 CMD ["gunicorn", "config.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8080"]

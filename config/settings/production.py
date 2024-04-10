@@ -94,7 +94,6 @@ aws_s3_domain = AWS_S3_CUSTOM_DOMAIN or f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws
 # STATIC
 # ------------------------
 STORAGES = {
-    **STORAGES,  # noqa: F405
     "default": {
         "BACKEND": "django_quote_service.utils.storages.MediaRootS3Boto3Storage",
     },
@@ -148,7 +147,7 @@ ANYMAIL = {
 COMPRESS_ENABLED = env.bool("COMPRESS_ENABLED", default=True)  # noqa: F405
 # https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_URL
 COMPRESS_URL = STATIC_URL  # noqa F405
-COMPRESS_STORAGE = STATICFILES_STORAGE  # noqa: F405
+COMPRESS_STORAGE = STORAGES["staticfiles"]["BACKEND"]
 # https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_OFFLINE
 COMPRESS_OFFLINE = True  # Offline compression is required when using Whitenoise
 # https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_FILTERS

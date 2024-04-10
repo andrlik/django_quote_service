@@ -12,7 +12,7 @@ kill_timeout = "5s"
   auto_rollback = true
 
 [deploy]
-  release_command = "poetry run python manage.py migrate"
+  release_command = "python manage.py migrate"
 
 [env]
   PORT = "8080"
