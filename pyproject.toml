@@ -26,6 +26,9 @@ dependencies = [
     "django-easy-logging>=0.4.0",
     "django-quotes>=0.4",
     "crispy-bootstrap5>=2024.2",
+    "django-cors-headers>=4.3.1",
+    "django-crispy-forms>=2.1",
+    "boto3>=1.34.81",
 ]
 
 [tool.rye]
@@ -49,6 +52,8 @@ dev-dependencies = [
     "pyright>=1.1.357",
     "django-types>=0.19.1",
     "types-factory-boy>=0.4.1",
+    "django-watchfiles>=0.1.1",
+    "pytest-django>=4.8.0",
 ]
 
 #[tool.poetry.dev-dependencies]
@@ -125,7 +130,7 @@ exclude = '''
 # Directories that are not visited by pytest collector:
 DJANGO_SETTINGS_MODULE = "config.settings.test"
 testpaths = ["tests", "django_quote_service"]
-django_find_project = false
+django_find_project = true
 norecursedirs = ["hooks", "*.egg", ".eggs", "dist", "build", "docs", ".tox", ".git", "__pycache__", ".venv", "node_modules"]
 doctest_optionflags = ["NUMBER", "NORMALIZE_WHITESPACE", "IGNORE_EXCEPTION_DETAIL"]
 filterwarnings = [
