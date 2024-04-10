@@ -338,3 +338,6 @@ vendors.js
 .env
 .envs/*
 .envrc
+
+# Backups
+*_db_backup.sql
