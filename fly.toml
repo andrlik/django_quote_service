@@ -11,8 +11,8 @@ kill_timeout = "5s"
 [experimental]
   auto_rollback = true
 
-[deploy]
-  release_command = "python manage.py migrate"
+#[deploy]
+#  release_command = "./manage.py migrate"
 
 [env]
   PORT = "8080"

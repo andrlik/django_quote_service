@@ -1,27 +1,30 @@
 ARG APP_NAME=django_quote_service
 ARG APP_PATH=/app
-ARG PYTHON_VERSION=3.12.0
+ARG PYTHON_VERSION=3.12.3
 
-# Stage: Staging
-FROM python:$PYTHON_VERSION as staging
+# Stage: staging
+FROM python:$PYTHON_VERSION-slim as staging
 ARG APP_NAME
 ARG APP_PATH
 
-ENV \
-    PYTHONDONTWRITEBYTECODE=1 \
+ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONFAULTHANDLER=1
-
-# Install uv
-RUN python -m pip install --upgrade uv pip
 
 WORKDIR $APP_PATH
 COPY ./pyproject.toml ./manage.py ./Justfile ./requirements.lock ./requirements-dev.lock ./
 COPY ./bin ./bin
 COPY ./config ./config
 COPY ./locale ./locale
-COPY ./staticfiles ./staticfiles
 COPY ./$APP_NAME ./$APP_NAME
+
+RUN mkdir staticfiles && apt-get update \
+    && apt-get install -y --no-install-recommends gcc build-essential \
+    && python -m pip install --no-cache-dir --upgrade uv pip setuptools build \
+    && python -m uv pip install --no-cache-dir --system -r requirements.lock \
+    && python -m spacy download en_core_web_trf --no-cache-dir \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get purge -y --auto-remove gcc build-essential
 
 # Stage: development
 FROM staging as development
@@ -45,15 +48,13 @@ ARG APP_NAME
 ARG APP_PATH
 
 WORKDIR $APP_PATH
-RUN python -m uv pip install --system -r requirements.lock
-RUN python -m spacy download en_core_web_trf
 
 ENV DJANGO_DEBUG=False \
     DJANGO_SETTINGS_MODULE=config.settings.production
 
-RUN python manage.py collectstatic --noinput
-RUN python manage.py compress
-RUN python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput \
+    && python manage.py compress \
+    && python manage.py collectstatic --noinput
 
-ENTRYPOINT ["python", "-m"]
-CMD ["gunicorn", "config.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8080"]
+# ENTRYPOINT ["python", "-m"]
+CMD ["daphne", "-p", "8080", "-b", "0.0.0.0", "config.asgi:application"]
