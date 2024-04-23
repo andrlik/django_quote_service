@@ -341,3 +341,4 @@ vendors.js
 
 # Backups
 *_db_backup.sql
+*_bu.sql
