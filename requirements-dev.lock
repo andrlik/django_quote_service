@@ -119,9 +119,9 @@ django-easy-logging==0.70
 django-environ==0.11.2
 django-extensions==3.2.3
 django-libsass==0.9
-django-markov==0.2.2
+django-markov==0.3.0
     # via django-quotes
-django-quotes==0.4.1
+django-quotes==0.5.1
 django-redis==5.4.0
 django-storages==1.14.2
 django-types==0.19.1
