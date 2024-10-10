@@ -31,6 +31,14 @@ dependencies = [
     "gunicorn>=22.0.0",
     "django-storages[s3]>=1.14.4",
 ]
+classifiers = [
+    "Framework :: Django :: 5.0",
+    "Framework :: Django :: 5.1",
+    "License :: OSI Approved :: BSD License",
+    "Framework :: Django",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.11",
+]
 
 [tool.uv]
 managed = true
