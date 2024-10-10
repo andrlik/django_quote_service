@@ -1,11 +1,9 @@
-#
 # forms.py
 #
 # Copyright (c) 2024 Daniel Andrlik
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
-#
 
 from allauth.account.forms import SignupForm
 from allauth.socialaccount.forms import SignupForm as SocialSignupForm
@@ -19,6 +17,15 @@ User = get_user_model()
 class UserAdminChangeForm(admin_forms.UserChangeForm):
     class Meta(admin_forms.UserChangeForm.Meta):
         model = User
+        fields = (
+            "email",
+            "name",
+            "is_active",
+            "is_staff",
+            "is_superuser",
+            "groups",
+            "user_permissions",
+        )
 
 
 class UserAdminCreationForm(admin_forms.UserCreationForm):
@@ -29,6 +36,12 @@ class UserAdminCreationForm(admin_forms.UserCreationForm):
 
     class Meta(admin_forms.UserCreationForm.Meta):
         model = User
+        fields = [
+            "username",
+            "email",
+            "password1",
+            "password2",
+        ]
 
         error_messages = {"username": {"unique": _("This username has already been taken.")}}
 

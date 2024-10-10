@@ -1,11 +1,9 @@
-#
 # admin.py
 #
 # Copyright (c) 2024 Daniel Andrlik
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
-#
 
 from django.contrib import admin
 from django.contrib.auth import admin as auth_admin
@@ -21,8 +19,18 @@ User = get_user_model()
 class UserAdmin(auth_admin.UserAdmin):
     form = UserAdminChangeForm
     add_form = UserAdminCreationForm
-    fieldsets = (
-        (None, {"fields": ("username", "password")}),
+    fields = [
+        "username",
+        "email",
+        "name",
+        "is_active",
+        "is_staff",
+        "is_superuser",
+        "groups",
+        "user_permissions",
+    ]
+    add_fieldsets = (
+        (None, {"fields": ("username",)}),
         (_("Personal info"), {"fields": ("name", "email")}),
         (
             _("Permissions"),
@@ -36,7 +44,7 @@ class UserAdmin(auth_admin.UserAdmin):
                 ),
             },
         ),
-        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
+    fieldsets = add_fieldsets
     list_display = ["username", "name", "is_superuser"]
     search_fields = ["name"]
