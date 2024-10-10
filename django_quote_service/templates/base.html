@@ -13,11 +13,11 @@
 
     {% block css %}
     <!-- Latest compiled and minified Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'css/vendor/bootstrap.min.css' %}" />
+      <link rel="stylesheet" href="{% static 'css/vendor/bootstrap.min.css' %}" />
 
     <!-- Your stuff: Third-party CSS libraries go here -->{% compress css %}
     <!-- This file stores project-specific CSS -->
-    <link href="{% static 'css/project.css' %}" rel="stylesheet">{% endcompress %}
+        <link href="{% static 'css/project.css' %}" rel="stylesheet">{% endcompress %}
     {% endblock %}
     <!-- Le javascript
     ================================================== -->
@@ -28,7 +28,7 @@
       <!-- Your stuff: Third-party javascript libraries go here -->
 
       <!-- place project specific Javascript in this file -->{% compress js %}
-      <script defer src="{% static 'js/project.js' %}"></script>{% endcompress %}
+        <script defer src="{% static 'js/project.js' %}"></script>{% endcompress %}
 
     {% endblock javascript %}
 
@@ -54,11 +54,11 @@
               </li>
               {% if request.user.is_authenticated %}
                 <li class="nav-item">
-                <a class="nav-link" href="{% url 'quotes:group_list' %}">{% translate "Your Groups" %}</a>
+                  <a class="nav-link" href="{% url 'quotes:group_list' %}">{% translate "Your Groups" %}</a>
                 </li>
                 {% if request.user.is_superuser %}
                   <li class="nav-item"><a class="nav-link" href="{% url 'admin:index' %}">{% translate "Admin" %}</a></li>
-                  {% endif %}
+                {% endif %}
                 <li class="nav-item">
                   {# URL provided by django-allauth/account/urls.py #}
                   <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% translate "My Profile" %}</a>
@@ -69,11 +69,11 @@
                 </li>
               {% else %}
                 {% if ACCOUNT_ALLOW_REGISTRATION %}
-              <li class="nav-item">
+                  <li class="nav-item">
                 {# URL provided by django-allauth/account/urls.py #}
-                <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
-              </li>
-              {% endif %}
+                    <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
+                  </li>
+                {% endif %}
                 <li class="nav-item">
                   {# URL provided by django-allauth/account/urls.py #}
                   <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% translate "Sign In" %}</a>
@@ -99,12 +99,12 @@
 
       {% block content %}
         <div class="col-sm-6">
-        <h1>{% translate "Welcome to Quote Service!" %}</h1>
+          <h1>{% translate "Welcome to Quote Service!" %}</h1>
 
-        <p>{% blocktranslate %}You can use this service to collect groups of quotes that you want to retrieve later.
-          The most fun way to use this service is to collect the quotes and then have bots hit up our API in order to
-          do things like fetch random quotes or even generate sentences based on the quotes using
-          <a href="https://brilliant.org/wiki/markov-chains/">Markov chain</a> text models.{% endblocktranslate %}</p>
+          <p>{% blocktranslate %}You can use this service to collect groups of quotes that you want to retrieve later.
+            The most fun way to use this service is to collect the quotes and then have bots hit up our API in order to
+            do things like fetch random quotes or even generate sentences based on the quotes using
+            <a href="https://brilliant.org/wiki/markov-chains/">Markov chain</a> text models.{% endblocktranslate %}</p>
         </div>
       {% endblock content %}
 
