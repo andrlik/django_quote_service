@@ -118,6 +118,21 @@ wheels = [
 ]
 
 [[package]]
+name = "bandit"
+version = "1.7.10"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "colorama", marker = "platform_system == 'Windows'" },
+    { name = "pyyaml" },
+    { name = "rich" },
+    { name = "stevedore" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/38/26/bdd962d6ee781f6229c3fb83483cf9e09d87959150a9000789806d750f3c/bandit-1.7.10.tar.gz", hash = "sha256:59ed5caf5d92b6ada4bf65bc6437feea4a9da1093384445fed4d472acc6cff7b", size = 4228540 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9e/9c/491231d973d54f6465002812b4cadc663f208436407745be473254725f55/bandit-1.7.10-py3-none-any.whl", hash = "sha256:665721d7bebbb4485a339c55161ac0eedde27d51e638000d91c8c2d68343ad02", size = 130756 },
+]
+
+[[package]]
 name = "blis"
 version = "1.0.1"
 source = { registry = "https://pypi.org/simple" }
@@ -744,6 +759,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "bandit" },
     { name = "django-coverage-plugin" },
     { name = "django-debug-toolbar" },
     { name = "django-extensions" },
@@ -796,6 +812,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "bandit", specifier = ">=1.7.10" },
     { name = "django-coverage-plugin", specifier = ">=2.0.2" },
     { name = "django-debug-toolbar", specifier = ">=3.2.4" },
     { name = "django-extensions", specifier = ">=3.2.1" },
@@ -1612,6 +1629,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/66/94/68e2e17afaa9169cf6412ab0f28623903be73d1b32e208d9e8e541bb086d/parso-0.8.4.tar.gz", hash = "sha256:eb3a7b58240fb99099a345571deecc0f9540ea5f4dd2fe14c2a99d6b281ab92d", size = 400609 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c6/ac/dac4a63f978e4dcb3c6d3a78c4d8e0192a113d288502a1216950c41b1027/parso-0.8.4-py2.py3-none-any.whl", hash = "sha256:a418670a20291dacd2dddc80c377c5c3791378ee1e8d12bffc35420643d43f18", size = 103650 },
+]
+
+[[package]]
+name = "pbr"
+version = "6.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/b2/35/80cf8f6a4f34017a7fe28242dc45161a1baa55c41563c354d8147e8358b2/pbr-6.1.0.tar.gz", hash = "sha256:788183e382e3d1d7707db08978239965e8b9e4e5ed42669bf4758186734d5f24", size = 124032 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1d/44/6a65ecd630393d47ad3e7d5354768cb7f9a10b3a0eb2cd8c6f52b28211ee/pbr-6.1.0-py2.py3-none-any.whl", hash = "sha256:a776ae228892d8013649c0aeccbb3d5f99ee15e005a4cbb7e61d55a067b28a2a", size = 108529 },
 ]
 
 [[package]]
@@ -2535,6 +2561,18 @@ wheels = [
 ]
 
 [[package]]
+name = "stevedore"
+version = "5.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pbr" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c4/59/f8aefa21020054f553bf7e3b405caec7f8d1f432d9cb47e34aaa244d8d03/stevedore-5.3.0.tar.gz", hash = "sha256:9a64265f4060312828151c204efbe9b7a9852a0d9228756344dbc7e4023e375a", size = 513768 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ec/50/70762bdb23f6c2b746b90661f461d33c4913a22a46bb5265b10947e85ffb/stevedore-5.3.0-py3-none-any.whl", hash = "sha256:1efd34ca08f474dad08d9b19e934a22c68bb6fe416926479ba29e5013bcc8f78", size = 49661 },
+]
+
+[[package]]
 name = "sympy"
 version = "1.13.3"
 source = { registry = "https://pypi.org/simple" }
@@ -2666,7 +2704,7 @@ name = "triton"
 version = "3.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "filelock" },
+    { name = "filelock", marker = "python_full_version < '3.13'" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/33/3e/a2f59384587eff6aeb7d37b6780de7fedd2214935e27520430ca9f5b7975/triton-3.0.0-1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:5ce8520437c602fb633f1324cc3871c47bee3b67acf9756c1a66309b60e3216c", size = 209438883 },

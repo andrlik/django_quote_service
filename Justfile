@@ -89,7 +89,7 @@ test *ARGS: check
 
 # Runs bandit safety checks.
 safety: check
-    uv run -m bandit -c pyproject.toml -r src
+    uv run -m bandit -c pyproject.toml -r django_quote_service
 
 # Access Django management commands.
 manage *ARGS: check

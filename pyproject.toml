@@ -55,6 +55,7 @@ dev-dependencies = [
     "django-watchfiles>=0.1.1",
     "pytest-django>=4.8.0",
     "ruff>=0.6.9",
+    "bandit>=1.7.10",
 ]
 package = false
 
@@ -209,6 +210,9 @@ exclude = ["**/migrations/",
 ]
 reportIncompatibleVariableOverride = false
 reportIncompatibleMethodOverride = false
+
+[tool.bandit]
+exclude_dirs = ["tests"]
 
 [tool.django-stubs]
 django_settings_module = "config.settings.test"
