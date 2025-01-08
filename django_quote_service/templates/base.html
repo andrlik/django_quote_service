@@ -1,10 +1,10 @@
-{% load static i18n compress %}<!DOCTYPE html>
+{% load compress i18n static %}<!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}
 <html lang="{{ LANGUAGE_CODE }}">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block extratitle %}{% endblock %}{% block title %}Quote Service{% endblock title %}</title>
+    <title>{% block extratitle %}{% endblock %}{% block title %}Quote Service{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A simple project that takes collections of quotes and then exposes an API for both random quotes and markov chain generated quotes.">
     <meta name="author" content="Daniel Andrlik">
@@ -18,13 +18,13 @@
     <!-- Your stuff: Third-party CSS libraries go here -->{% compress css %}
     <!-- This file stores project-specific CSS -->
         <link href="{% static 'css/project.css' %}" rel="stylesheet">{% endcompress %}
-    {% endblock %}
+    {% endblock css %}
     <!-- Le javascript
     ================================================== -->
     {# Placed at the top of the document so pages load faster with defer #}
     {% block javascript %}
       <!-- Bootstrap JS -->
-      <script defer src="{%  static 'js/vendor/bootstrap.min.js' %}"></script>
+      <script defer src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
       <!-- Your stuff: Third-party javascript libraries go here -->
 
       <!-- place project specific Javascript in this file -->{% compress js %}
@@ -61,7 +61,7 @@
                 {% endif %}
                 <li class="nav-item">
                   {# URL provided by django-allauth/account/urls.py #}
-                  <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% translate "My Profile" %}</a>
+                  <a class="nav-link" href="{% url 'users:detail' request.user.username %}">{% translate "My Profile" %}</a>
                 </li>
                 <li class="nav-item">
                   {# URL provided by django-allauth/account/urls.py #}
@@ -110,7 +110,7 @@
 
     </div> <!-- /container -->
 
-    {% block modal %}{% endblock modal %}
+    {% block modal %}{% endblock %}
 
     {% block inline_javascript %}
     {% comment %}

@@ -1,7 +1,6 @@
 {% extends "account/base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags i18n %}
 
 {% block head_title %}{% translate "Signup" %}{% endblock %}
 
@@ -19,4 +18,4 @@
     <button class="btn btn-primary" type="submit">{% translate "Sign Up" %} &raquo;</button>
   </form>
 
-{% endblock %}
+{% endblock inner %}

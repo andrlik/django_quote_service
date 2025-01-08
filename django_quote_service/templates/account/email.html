@@ -1,8 +1,6 @@
-
 {% extends "account/base.html" %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags i18n %}
 
 {% block head_title %}{% translate "Account" %}{% endblock %}
 
@@ -18,9 +16,9 @@
 
         {% for emailaddress in user.emailaddress_set.all %}
           <div class="radio">
-            <label for="email_radio_{{forloop.counter}}" class="{% if emailaddress.primary %}primary_email{%endif%}">
+            <label for="email_radio_{{ forloop.counter }}" class="{% if emailaddress.primary %}primary_email{% endif %}">
 
-              <input id="email_radio_{{forloop.counter}}" type="radio" name="email" {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked"{%endif %} value="{{emailaddress.email}}"/>
+              <input id="email_radio_{{ forloop.counter }}" type="radio" name="email" {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked"{% endif %} value="{{ emailaddress.email }}"/>
 
               {{ emailaddress.email }}
               {% if emailaddress.verified %}
@@ -43,7 +41,7 @@
     </form>
 
   {% else %}
-    <p><strong>{% translate 'Warning:'%}</strong> {% translate "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc." %}</p>
+    <p><strong>{% translate 'Warning:' %}</strong> {% translate "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc." %}</p>
 
   {% endif %}
 
@@ -56,8 +54,7 @@
     <button class="btn btn-primary" name="action_add" type="submit">{% translate "Add E-mail" %}</button>
   </form>
 
-{% endblock %}
-
+{% endblock inner %}
 
 {% block inline_javascript %}
   {{ block.super }}
@@ -75,4 +72,4 @@
       Array.from(document.getElementsByClassName('form-group')).forEach(x => x.classList.remove('row'));
     });
   </script>
-{% endblock %}
+{% endblock inline_javascript %}
