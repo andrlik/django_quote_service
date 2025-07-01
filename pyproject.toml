@@ -228,6 +228,7 @@ unfixable = [
 "config/urls.py" = ["RUF005"]
 "django_quote_service/users/adapters.py" = ["ARG002"]
 "django_quote_service/users/api/views.py" = ["ARG002"]
+"docs/conf.py" = ["PLC0415"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["django_quote_service"]

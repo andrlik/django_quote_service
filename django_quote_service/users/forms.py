@@ -1,6 +1,6 @@
 # forms.py
 #
-# Copyright (c) 2024 Daniel Andrlik
+# Copyright (c) 2024 - 2025 Daniel Andrlik
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
@@ -15,7 +15,7 @@ User = get_user_model()
 
 
 class UserAdminChangeForm(admin_forms.UserChangeForm):
-    class Meta(admin_forms.UserChangeForm.Meta):
+    class Meta(admin_forms.UserChangeForm.Meta):  # type: ignore
         model = User
         fields = (
             "email",
@@ -34,7 +34,7 @@ class UserAdminCreationForm(admin_forms.UserCreationForm):
     To change user signup, see UserSignupForm and UserSocialSignupForm.
     """
 
-    class Meta(admin_forms.UserCreationForm.Meta):
+    class Meta(admin_forms.UserCreationForm.Meta):  # type: ignore
         model = User
         fields = [
             "username",
