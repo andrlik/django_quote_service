@@ -1,11 +1,9 @@
-#
 # base.py
 #
-# Copyright (c) 2024 Daniel Andrlik
+# Copyright (c) 2024 - 2025 Daniel Andrlik
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
-#
 
 """
 Base settings to build other settings files upon.
@@ -90,6 +88,9 @@ THIRD_PARTY_APPS = [
     "rules.apps.AutodiscoverRulesConfig",
     "django_markov",
     "django_quotes",
+    "health_check",
+    "health_check.contrib.db_heartbeat",
+    "health_check.contrib.redis",
 ]
 
 LOCAL_APPS = [
