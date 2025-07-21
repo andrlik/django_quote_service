@@ -31,7 +31,7 @@ DATABASES["default"] = env.db(  # noqa F405
 )
 DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa F405
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=600)  # noqa F405
-DATABASES["default"]["OPTIONS"]["sslmode"] = "require"  # noqa F405
+DATABASES["default"]["OPTIONS"] = {"sslmode": "require"} # noqa F405
 REDIS_URL = env("REDIS_URL", default=None)  # noqa F405
 
 # CACHES
