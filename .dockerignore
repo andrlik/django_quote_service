@@ -4,7 +4,15 @@
 .gitignore
 .gitlab-ci.yml
 .idea
+docs
 .pre-commit-config.yaml
 .readthedocs.yml
 .travis.yml
-venv
+.venv
+.tox
+.nova
+.envs
+.coverage*
+quote_bu.sql
+.envrc
+.license-tools-config.json
