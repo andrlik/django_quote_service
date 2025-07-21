@@ -16,3 +16,7 @@ docs
 quote_bu.sql
 .envrc
 .license-tools-config.json
+.ruff_cache
+.pytest_cache
+.mypy_cache
+.git

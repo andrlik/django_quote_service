@@ -11,7 +11,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Dependencies for environment
 RUN <<EOT
 apt-get update -qy
-apt-get install -qyy optipng jpegoptim
+apt-get install -qyy optipng jpegoptim build-essential ca-certificates python3-setuptools libsass-dev
 EOT
 
 # Install uv
@@ -41,8 +41,8 @@ COPY . /app
 WORKDIR /app
 ENV UV_PROJECT_ENVIRONMENT=/app/.venv
 RUN --mount=type=cache,target=/root/.cache \
-    uv sync --locked --no-dev \
-    uv pip install pip \
+    uv sync --locked --no-dev && \
+    uv pip install pip && \
     uv run -m spacy download en_core_web_sm
 
 # Compress and collect staticfiles for whitenoise
@@ -53,7 +53,11 @@ bash -c /app/.venv/bin/python -m manage collectstatic --noinput --skip-checks
 EOT
 
 ######################################################################
-FROM python:3.13-slim-bookworm
+FROM python:3.13-slim-bookworm AS release
+LABEL org.opencontainers.image.source=https://github.com/andrlik/django_quote_service
+LABEL org.opencontainers.image.description="A container for running the quote service and API"
+LABEL org.opencontainers.image.licenses=BSD-3-Clause
+
 SHELL ["sh", "-exc"]
 # Ensure apt-get doesn't open a menu on you.
 ENV DEBIAN_FRONTEND=noninteractive
@@ -64,12 +68,15 @@ apt-get install -qyy optipng jpegoptim
 EOT
 
 RUN <<EOT
+mkdir /app
 groupadd -r app
 useradd -r -d /app -g app -N app
 EOT
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
 STOPSIGNAL SIGINT
+
+EXPOSE 8000
 
 # Clean up
 RUN <<EOT
@@ -79,7 +86,7 @@ EOT
 
 COPY docker-entrypoint.sh /app
 
-COPY --from=build --chown=app:app /app /app
+COPY --from=build --chown=app:app /app /app/
 
 USER app
 WORKDIR /app
@@ -91,5 +98,4 @@ ENV PATH=/app/.venv/bin:$PATH \
 RUN <<EOT
 python -V
 python -Im site
-python -Ic 'import django_quote_service'
 EOT
