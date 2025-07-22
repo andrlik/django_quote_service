@@ -149,7 +149,7 @@ COMPRESS_ENABLED = env.bool("COMPRESS_ENABLED", default=True)  # noqa: F405
 COMPRESS_URL = STATIC_URL  # noqa F405
 COMPRESS_STORAGE = STORAGES["staticfiles"]["BACKEND"]
 # https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_OFFLINE
-COMPRESS_OFFLINE = True  # Offline compression is required when using Whitenoise
+COMPRESS_OFFLINE = False  # Offline compression is required when using Whitenoise
 # https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_FILTERS
 COMPRESS_FILTERS = {
     "css": [
