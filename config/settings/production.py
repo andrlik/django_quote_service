@@ -98,7 +98,7 @@ STORAGES = {
         "BACKEND": "django_quote_service.utils.storages.MediaRootS3Boto3Storage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "servestatic.storage.CompressedManifestStaticFilesStorage",
     },
 }
 WHITENOISE_MANIFEST_STRICT = False

@@ -1,11 +1,9 @@
-#
 # local.py
 #
-# Copyright (c) 2024 Daniel Andrlik
+# Copyright (c) 2024 - 2025 Daniel Andrlik
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
-#
 
 from dj_easy_log import load_loguru
 
@@ -41,7 +39,7 @@ EMAIL_BACKEND = env("DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.c
 # WhiteNoise
 # ------------------------------------------------------------------------------
 # http://whitenoise.evans.io/en/latest/django.html#using-whitenoise-in-development
-INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS  # noqa F405
+INSTALLED_APPS = ["servestatic.runserver_nostatic"] + INSTALLED_APPS  # noqa F405
 
 
 # django-debug-toolbar

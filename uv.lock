@@ -692,8 +692,8 @@ dependencies = [
     { name = "psycopg", extra = ["binary"] },
     { name = "rcssmin" },
     { name = "sentry-sdk" },
+    { name = "servestatic" },
     { name = "uvicorn", extra = ["standard"] },
-    { name = "whitenoise" },
 ]
 
 [package.dev-dependencies]
@@ -747,8 +747,8 @@ requires-dist = [
     { name = "psycopg", extras = ["binary"], specifier = ">=3.1.8" },
     { name = "rcssmin", specifier = ">=1.1.0" },
     { name = "sentry-sdk", specifier = ">=1.5.4" },
+    { name = "servestatic", specifier = ">=3.1.0" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.29.0" },
-    { name = "whitenoise", specifier = ">=6.0.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -2075,6 +2075,18 @@ wheels = [
 ]
 
 [[package]]
+name = "servestatic"
+version = "3.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "asgiref" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ab/68/8d3f4b0d29ba4ebfb4a346f095ce06f092c045a286e98cbe4e6fb9e21d33/servestatic-3.1.0.tar.gz", hash = "sha256:3d0c191e0c570b56a387c7ed400ca535b4a37f73cd9a68a50be4d1abd735a000", size = 24376, upload-time = "2025-06-11T00:32:20.164Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c8/e5/cdbe73e08e68497dc3a5441e2abff9d1a40da7bc6598f0b21e84915c5f08/servestatic-3.1.0-py3-none-any.whl", hash = "sha256:9ca4257a155d053047c60c196fc230ee2193a80b810761022e53584c3309eea9", size = 28425, upload-time = "2025-06-11T00:32:18.419Z" },
+]
+
+[[package]]
 name = "setuptools"
 version = "80.9.0"
 source = { registry = "https://pypi.org/simple" }
@@ -2767,15 +2779,6 @@ wheels = [
 [package.optional-dependencies]
 watchdog = [
     { name = "watchdog" },
-]
-
-[[package]]
-name = "whitenoise"
-version = "6.9.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/b9/cf/c15c2f21aee6b22a9f6fc9be3f7e477e2442ec22848273db7f4eb73d6162/whitenoise-6.9.0.tar.gz", hash = "sha256:8c4a7c9d384694990c26f3047e118c691557481d624f069b7f7752a2f735d609", size = 25920, upload-time = "2025-02-06T22:16:34.957Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/64/b2/2ce9263149fbde9701d352bda24ea1362c154e196d2fda2201f18fc585d7/whitenoise-6.9.0-py3-none-any.whl", hash = "sha256:c8a489049b7ee9889617bb4c274a153f3d979e8f51d2efd0f5b403caf41c57df", size = 20161, upload-time = "2025-02-06T22:16:32.589Z" },
 ]
 
 [[package]]
