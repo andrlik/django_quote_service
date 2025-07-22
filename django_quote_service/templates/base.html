@@ -15,9 +15,9 @@
     <!-- Latest compiled and minified Bootstrap CSS -->
       <link rel="stylesheet" href="{% static 'css/vendor/bootstrap.min.css' %}" />
 
-    <!-- Your stuff: Third-party CSS libraries go here -->{% compress css %}
+    <!-- Your stuff: Third-party CSS libraries go here -->
     <!-- This file stores project-specific CSS -->
-        <link href="{% static 'css/project.css' %}" rel="stylesheet">{% endcompress %}
+      <link href="{% static 'css/project.css' %}" rel="stylesheet">
     {% endblock css %}
     <!-- Le javascript
     ================================================== -->
@@ -27,8 +27,8 @@
       <script defer src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
       <!-- Your stuff: Third-party javascript libraries go here -->
 
-      <!-- place project specific Javascript in this file -->{% compress js %}
-        <script defer src="{% static 'js/project.js' %}"></script>{% endcompress %}
+      <!-- place project specific Javascript in this file -->
+      <script defer src="{% static 'js/project.js' %}"></script>
 
     {% endblock javascript %}
 
