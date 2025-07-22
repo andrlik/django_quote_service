@@ -76,8 +76,6 @@ EOT
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
 STOPSIGNAL SIGINT
 
-EXPOSE 8000
-
 # Clean up
 RUN <<EOT
 apt-get clean
