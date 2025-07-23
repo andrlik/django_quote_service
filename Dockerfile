@@ -84,8 +84,8 @@ WORKDIR /app
 ENV PATH=/app/.venv/bin:$PATH \
     DJANGO_SETTINGS_MODULE=config.production.settings \
     PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
-    PYTHONPATH="/app:/app/.venv/bin"
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app:/app/.venv/bin
 
 # Compress and collect staticfiles for whitenoise
 RUN <<EOT
