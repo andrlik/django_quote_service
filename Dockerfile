@@ -45,13 +45,6 @@ RUN --mount=type=cache,target=/root/.cache \
     uv pip install pip && \
     uv run --no-sync -m spacy download en_core_web_sm
 
-# Compress and collect staticfiles for whitenoise
-RUN <<EOT
-bash -c /app/.venv/bin/python -m manage collectstatic --noinput --skip-checks
-bash -c /app/.venv/bin/python -m manage compress --follow-links
-bash -c /app/.venv/bin/python -m manage collectstatic --noinput --skip-checks
-EOT
-
 ######################################################################
 FROM python:3.13-slim-bookworm AS release
 LABEL org.opencontainers.image.source=https://github.com/andrlik/django_quote_service
@@ -92,6 +85,12 @@ ENV PATH=/app/.venv/bin:$PATH \
     DJANGO_SETTINGS_MODULE=config.production.settings \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
+    PYTHONPATH="/app:/app/.venv/bin"
+
+# Compress and collect staticfiles for whitenoise
+RUN <<EOT
+bash -c /app/.venv/bin/python -m manage collectstatic --noinput --skip-checks
+EOT
 
 RUN <<EOT
 python -V
