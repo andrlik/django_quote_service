@@ -8,7 +8,6 @@
 import logging
 
 import sentry_sdk
-from dj_easy_log import load_loguru
 from django.core.management.utils import get_random_secret_key
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
@@ -215,6 +214,3 @@ sentry_sdk.init(
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-
-
-load_loguru(globals())

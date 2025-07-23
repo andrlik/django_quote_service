@@ -1,17 +1,13 @@
-#
 # test.py
 #
-# Copyright (c) 2024 Daniel Andrlik
+# Copyright (c) 2024 - 2025 Daniel Andrlik
 # All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
-#
 
 """
 With these settings, tests run faster.
 """
-
-from dj_easy_log import load_loguru
 
 from config.settings.base import *  # noqa: F403
 
@@ -46,5 +42,3 @@ LOGGING["loggers"] = {  # noqa
         "propagate": True,
     }
 }
-
-load_loguru(globals())

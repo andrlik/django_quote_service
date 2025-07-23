@@ -5,8 +5,6 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-from dj_easy_log import load_loguru
-
 from config.settings.base import *  # noqa: F403
 
 # GENERAL
@@ -93,6 +91,3 @@ LOGGING = {
         },
     },
 }
-
-
-load_loguru(globals())
