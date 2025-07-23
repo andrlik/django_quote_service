@@ -179,7 +179,7 @@ LOGGING = {
             "formatter": "verbose",
         }
     },
-    "root": {"level": "INFO", "handlers": ["console"]},
+    "root": {"level": env.bool("DJANGO_LOG_LEVEL", default="INFO"), "handlers": ["console"]},  # noqa: F405
     "loggers": {
         "django.db.backends": {
             "level": "ERROR",
