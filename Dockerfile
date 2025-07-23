@@ -64,7 +64,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Dependencies for environment
 RUN <<EOT
 apt-get update -qy
-apt-get install -qyy optipng jpegoptim curl
+apt-get install -qyy optipng jpegoptim curl wget
 EOT
 
 RUN <<EOT
