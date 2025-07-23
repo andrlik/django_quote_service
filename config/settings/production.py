@@ -16,6 +16,8 @@ from sentry_sdk.integrations.redis import RedisIntegration
 
 from config.settings.base import *  # noqa: F403
 
+WSGI_APPLICATION = None
+
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
